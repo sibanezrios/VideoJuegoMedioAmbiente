@@ -1,0 +1,8 @@
+{
+  "nivel": 1,
+  "nombre": "Bosque contaminado",
+  "enemigos": [{ "tipo": "basura", "x": 5, "y": 2 }],
+  "arboles": [{ "tipo": "pino", "x": 1, "y": 3 }],
+  "objetivo": "Planta 5 árboles y elimina toda la basura"
+}
+
