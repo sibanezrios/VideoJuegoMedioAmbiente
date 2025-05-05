@@ -1,26 +1,25 @@
 
+import React, { useState } from 'react';
+import Menu from './components/Menu';
 import campoLimpio from './assets/ImagenGranja.png';
 import feliz from './assets/ImagenGranjaFinalFeliz.png';
-import deforestado from './assets/ImagenGranjaFinalSinArboles.png';
 import campoSucio from './assets/ImagenGranjaFinalTriste.png';
-import "./App.css";
-import { useState } from 'react';
-
-const imagenes=[campoLimpio,feliz,deforestado,campoSucio]
-
+import deforestado from './assets/ImagenGranjaFinalSinArboles.png';
 
 function App() {
+  const [mostrarJuego, setMostrarJuego] = useState(false);
+
   const [puntosPositivos, setPuntosPositivos] = useState(0);
   const [puntosNegativos, setPuntosNegativos] = useState(0);
   const [futuroFinal, setFuturoFinal] = useState<string | null>(null);
- 
+
   type Futuro = "inicio" | "positivo" | "neutral" | "negativo";
 
   const decidirFuturo = (positivos: number, negativos: number): Futuro => {
     const total = positivos - negativos;
     if (total >= 5) return "positivo";
     if (total > 0) return "neutral";
-    if(total === 0)return"inicio";
+    if (total === 0) return "inicio";
     return "negativo";
   };
 
@@ -37,8 +36,14 @@ function App() {
     return null;
   };
 
+  // Mostrar menú principal si no ha iniciado el juego
+  if (!mostrarJuego) {
+    return <Menu onStart={() => setMostrarJuego(true)} />;
+  }
+
+  // Si ya empezó, mostrar el juego
   return (
-    <div>
+    <div className="App" style={{ textAlign: 'center' }}>
       <h1>🌱 Juego Ambiental</h1>
 
       <button onClick={() => setPuntosPositivos(p => p + 1)}>✔️ Buena acción</button>
@@ -56,5 +61,6 @@ function App() {
 }
 
 export default App;
+
 
 
