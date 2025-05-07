@@ -1,40 +1,23 @@
 import React, { useState } from 'react';
 import Menu from './components/Menu';
-import campoLimpio from './assets/ImagenGranja.png';
-import feliz from './assets/ImagenGranjaFinalFeliz.png';
-import campoSucio from './assets/ImagenGranjaFinalTriste.png';
-import deforestado from './assets/ImagenGranjaFinalSinArboles.png';
 import Inicio from './components/inicio';
+import MapaBarrio from './MapaBarrio';
+import MapaRio from './MapaRio';
+import FuturoEscena from './FuturoEscena';
+import FuturoEscena2 from './FuturoEscena2';
 
 type Fase = 'inicio' | 'menu' | 'juego';
-type Futuro = 'inicio' | 'positivo' | 'neutral' | 'negativo';
+type Futuro = 'muy_bueno' | 'medio' | 'malo' | null;
 
 function App() {
   const [fase, setFase] = useState<Fase>('inicio');
+  const [nivel, setNivel] = useState(1);
+  const [futuro, setFuturo] = useState<Futuro>(null);
+  const [puntos, setPuntos] = useState(0);
 
-  const [puntosPositivos, setPuntosPositivos] = useState(0);
-  const [puntosNegativos, setPuntosNegativos] = useState(0);
-  const [futuroFinal, setFuturoFinal] = useState<Futuro | null>(null);
-
-  const decidirFuturo = (positivos: number, negativos: number): Futuro => {
-    const total = positivos - negativos;
-    if (total >= 5) return 'positivo';
-    if (total > 0) return 'neutral';
-    if (total === 0) return 'inicio';
-    return 'negativo';
-  };
-
-  const viajarAlFuturo = () => {
-    const futuro = decidirFuturo(puntosPositivos, puntosNegativos);
-    setFuturoFinal(futuro);
-  };
-
-  const obtenerImagenFuturo = () => {
-    if (futuroFinal === 'inicio') return campoLimpio;
-    if (futuroFinal === 'positivo') return feliz;
-    if (futuroFinal === 'neutral') return campoSucio;
-    if (futuroFinal === 'negativo') return deforestado;
-    return null;
+  const avanzarNivel = () => {
+    setFuturo(null);
+    if (nivel === 1) setNivel(2);
   };
 
   // === Control por fases ===
@@ -46,23 +29,32 @@ function App() {
     return <Menu onStart={() => setFase('juego')} />;
   }
 
-  // === Juego principal ===
-  return (
-    <div className="App" style={{ textAlign: 'center' }}>
-      <h1>🌱 Juego Ambiental</h1>
-
-      <button onClick={() => setPuntosPositivos(p => p + 1)}>✔️ Buena acción</button>
-      <button onClick={() => setPuntosNegativos(n => n + 1)}>❌ Mala acción</button>
-      <button onClick={viajarAlFuturo}>🚀 Ver el futuro</button>
-
-      {futuroFinal && (
-        <div>
-          <h2>Futuro: {futuroFinal}</h2>
-          <img src={obtenerImagenFuturo()!} alt="Futuro" width="600" />
+  // === Fase de juego con niveles ===
+  if (fase === 'juego') {
+    if (nivel === 1) {
+      return (
+        <div className="App">
+          <h1>🌱 Juego Ambiental - Nivel 1: El Barrio</h1>
+          <MapaBarrio setPuntos={setPuntos} setFuturo={setFuturo} />
+          {futuro && (
+            <FuturoEscena tipo={futuro} puntos={puntos} onContinuar={avanzarNivel} />
+          )}
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+
+    if (nivel === 2) {
+      return (
+        <div className="App">
+          <h1>🌊 Juego Ambiental - Nivel 2: El Río</h1>
+          <MapaRio setPuntos={setPuntos} setFuturo={setFuturo} />
+          {futuro && <FuturoEscena2 futuro={futuro} />}
+        </div>
+      );
+    }
+  }
+
+  return null;
 }
 
 export default App;
