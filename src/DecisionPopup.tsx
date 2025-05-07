@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 
 interface DecisionPopupProps {
@@ -8,22 +10,22 @@ interface DecisionPopupProps {
 
 const preguntas = {
   arbol: "¿Quieres conservar los árboles?",
-  fabrica: "¿Quieres cerrar esta fábrica contaminante?",
+  fabrica: "¿Quieres modernizar esta fábrica contaminante?",
   lote: "¿Quieres convertir este espacio en un parque?"
 };
 
 const opciones = {
   arbol: [
-    { texto: "Sí, conservar", valor: "conservar" },
-    { texto: "No, talar", valor: "talar" }
+    { texto: "Conservar los árboles", valor: "conservar" },
+    { texto: "Eliminar los árboles para construir", valor: "eliminar" }
   ],
   fabrica: [
-    { texto: "Sí, cerrar", valor: "cerrar" },
-    { texto: "No, dejarla abierta", valor: "dejar" }
+    { texto: "Modernizar la fábrica", valor: "modernizar" },
+    { texto: "Mantener la fábrica tal como está", valor: "mantener" }
   ],
   lote: [
-    { texto: "Sí, hacer parque", valor: "parque" },
-    { texto: "No, dejarlo vacío", valor: "vacío" }
+    { texto: "Convertir el lote en un parque", valor: "parque" },
+    { texto: "Convertir el lote en una zona comercial", valor: "comercial" }
   ]
 };
 
