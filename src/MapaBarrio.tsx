@@ -419,19 +419,19 @@ function MapaBarrio({ setPuntos, setFuturo }: MapaBarrioProps) {
 
       {/* Mostrar popup de decisiones */}
       {popup && (
-        <DecisionPopup
-          tipo={popup === 'arbol' ? 'arbol' : popup === 'fabrica' ? 'fabrica' : 'lote'}
-          pregunta={preguntasYOpciones[popup].pregunta}
-          opciones={preguntasYOpciones[popup].opciones}
-          onClose={() => setPopup(null)}
-          onSelect={(decision: string) => {
-            if (popup === "arbol") setArbolDecision(decision);
-            if (popup === "fabrica") setFabricaDecision(decision);
-            if (popup === "lote") setLoteDecision(decision);
-            setPopup(null);
-          }}
-        />
-      )}
+  <DecisionPopup
+    tipo={popup === 'arbol' ? 'arbol' : popup === 'fabrica' ? 'fabrica' : 'lote'}
+    pregunta={preguntasYOpciones[popup].pregunta}
+    opciones={preguntasYOpciones[popup].opciones}
+    onClose={() => setPopup(null)}
+    onSelect={(decision: string) => {
+      if (popup === "arbol") setArbolDecision(decision);
+      if (popup === "fabrica") setFabricaDecision(decision);
+      if (popup === "lote") setLoteDecision(decision);
+      setPopup(null);
+    }}
+  />
+)}
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (

@@ -120,19 +120,20 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
 
       {/* Mostrar popup de decisiones */}
       {popup && (
-        <DecisionPopup
-          tipo={popup === 'rio' ? 'rio' : popup === 'bosque' ? 'bosque' : 'planta'} // Cambié "río" a "rio"
-          pregunta={preguntasYOpciones[popup].pregunta}
-          opciones={preguntasYOpciones[popup].opciones}
-          onClose={() => setPopup(null)}
-          onSelect={(decision: string) => {
-            if (popup === "rio") setRíoDecision(decision); // Cambié "río" a "rio"
-            if (popup === "bosque") setBosqueDecision(decision);
-            if (popup === "planta") setPlantaDecision(decision);
-            setPopup(null);
-          }}
-        />
-      )}
+  <DecisionPopup
+    tipo={popup === 'rio' ? 'rio' : popup === 'bosque' ? 'bosque' : 'planta'}  // Aquí se pasa el tipo adecuado según el popup
+    pregunta={preguntasYOpciones[popup].pregunta}
+    opciones={preguntasYOpciones[popup].opciones}
+    onClose={() => setPopup(null)}
+    onSelect={(decision: string) => {
+      if (popup === "rio") setRíoDecision(decision);
+      if (popup === "bosque") setBosqueDecision(decision);
+      if (popup === "planta") setPlantaDecision(decision);
+      setPopup(null);
+    }}
+  />
+)}
+
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
@@ -145,3 +146,5 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
 };
 
 export default MapaRio;
+
+
