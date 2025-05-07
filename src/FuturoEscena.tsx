@@ -1,45 +1,46 @@
 
-
 import React from 'react';
-import bueno from './assets/futuro_bueno.png';
-import medio from './assets/futuro_medio.png';
-import malo from './assets/futuro_malo.png';
+import bueno from './assets/futuro_bueno.png';  // Imagen para el futuro bueno
+import medio from './assets/futuro_medio.png';  // Imagen para el futuro medio
+import malo from './assets/futuro_malo.png';  // Imagen para el futuro malo
+
+// Definimos el tipo de 'futuro' con los valores posibles
+type Futuro = 'muy_bueno' | 'medio' | 'malo';
 
 interface FuturoEscenaProps {
-  tipo: 'muy_bueno' | 'medio' | 'malo';
-  puntos: number; // Agregamos los puntos para mostrar la retroalimentación
+  tipo: Futuro;  // Recibimos el futuro como propiedad
+  puntos: number;  // Recibimos los puntos acumulados por el jugador
+  onContinuar: () => void; // Función para continuar al siguiente nivel
 }
 
+// Mensajes que se mostrarán según el futuro
 const mensajes = {
   muy_bueno: (puntos: number) => `¡Felicidades! Has creado un barrio saludable y sostenible. 🌳🎉 Puntaje: ${puntos}`,
   medio: (puntos: number) => `Bien hecho, el barrio mejoró, pero aún hay trabajo por hacer. 🌱 Puntaje: ${puntos}`,
   malo: (puntos: number) => `El barrio empeoró. ¡Aún puedes mejorar! 💔 Puntaje: ${puntos}`
 };
 
+// Asignación de imágenes según el tipo de futuro
 const imagenes = {
   muy_bueno: bueno,
   medio: medio,
   malo: malo
 };
 
-const FuturoEscena: React.FC<FuturoEscenaProps> = ({ tipo, puntos }) => {
-  const irACapitulo2 = () => {
-    alert("¡Has completado el Capítulo 1! Avanzando al Capítulo 2...");
-    // Aquí podrías usar algo como react-router para navegar entre capítulos
-  };
-
+const FuturoEscena: React.FC<FuturoEscenaProps> = ({ tipo, puntos, onContinuar }) => {
   return (
     <div style={contenedor}>
       <h2>El Futuro del Barrio</h2>
       <img src={imagenes[tipo]} alt={`Futuro ${tipo}`} style={{ width: '100%', maxWidth: '600px', borderRadius: '12px' }} />
       <p>{mensajes[tipo](puntos)}</p> {/* Mostramos el mensaje con el puntaje */}
-      <button onClick={irACapitulo2} style={boton}>Continuar</button>
+      <button onClick={onContinuar} style={boton}>Continuar</button> {/* Botón de continuar */}
     </div>
   );
 };
 
 export default FuturoEscena;
 
+// Estilo de los componentes
 const contenedor: React.CSSProperties = {
   textAlign: 'center',
   padding: '2rem'
@@ -55,5 +56,5 @@ const boton: React.CSSProperties = {
   border: 'none',
   cursor: 'pointer'
 };
-export {};
+
 
