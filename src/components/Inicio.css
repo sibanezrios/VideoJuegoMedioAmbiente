@@ -1,0 +1,88 @@
+.inicio-dual-bg {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+}
+
+/* Imágenes de fondo superpuestas */
+.imagen-incendio,
+.imagen-bosque {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  filter: brightness(0.25) contrast(1.1); /* casi negro */
+  z-index: 0;
+}
+
+.imagen-incendio {
+  left: 0;
+}
+
+.imagen-bosque {
+  right: 0;
+}
+
+/* Línea central animada */
+.divisor-animado {
+  width: 3px;
+  height: 100%;
+  background: #0ff;
+  animation: flicker 1.2s infinite alternate;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 1;
+  box-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.6; box-shadow: 0 0 8px #0ff; }
+  50% { opacity: 1; box-shadow: 0 0 20px #0ff; }
+  100% { opacity: 0.8; box-shadow: 0 0 12px #0ff; }
+}
+
+/* Cuadro central */
+.contenedor-central {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #0ff;
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 15px #0ff;
+  backdrop-filter: blur(10px);
+}
+
+.central-texto {
+  color: #0ff;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 5px #0ff;
+}
+
+/* Botón START */
+.start-button {
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 2px solid #0ff;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #0ff;
+  transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+}
+

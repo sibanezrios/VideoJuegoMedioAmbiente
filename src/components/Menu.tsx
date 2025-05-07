@@ -1,6 +1,8 @@
-// src/components/Menu.tsx
 import React, { useState } from 'react';
-import fondoMenu from '../assets/ImagenMenuVideoJuego.png';
+import { motion } from 'framer-motion';
+import fondoOscuro from '../assets/fondoOscuro.jpg';
+import fondoClaro from '../assets/fondoClaro.jpg';
+import './Inicio.css';
 
 interface MenuProps {
   onStart: () => void;
@@ -11,113 +13,111 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const [mostrarCreditos, setMostrarCreditos] = useState(false);
 
   return (
-    <div style={contenedorPrincipal}>
-      <div style={contenedorImagen}>
-        <img
-          src={fondoMenu}
-          alt="Fondo del menú"
-          style={{ width: '530px', height: '900', borderRadius: '12px',   marginTop: '10px', marginBottom: '30  0px'}}
-        />
+    <div className="inicio-dual-bg">
+      {/* FONDOS */}
+      <img src={fondoOscuro} className="imagen-incendio" alt="Futuro oscuro" />
+      <img src={fondoClaro} className="imagen-bosque" alt="Futuro brillante" />
 
-        {/* ÁREA: JUGAR */}
+      {/* DIVISOR */}
+      <div className="divisor-animado"></div>
+
+      {/* CUADRO CENTRAL */}
+      <motion.div
+        className="contenedor-central"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1 }}
+      >
         {!mostrarControles && !mostrarCreditos && (
           <>
-            <div style={areaJugar} onClick={onStart} />
-            <div style={areaControles} onClick={() => setMostrarControles(true)} />
-            <div style={areaCreditos} onClick={() => setMostrarCreditos(true)} />
+            <h1 className="central-texto">🌿 EcoAventura</h1>
+            <p className="central-texto">Elige sabiamente. Tu decisión impacta el planeta.</p>
+            <motion.button
+              className="start-button neon-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onStart}
+            >
+              🎮 Jugar
+            </motion.button>
+            <motion.button
+              className="start-button neon-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMostrarControles(true)}
+            >
+              📘 Controles
+            </motion.button>
+            <motion.button
+              className="start-button neon-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMostrarCreditos(true)}
+            >
+              📜 Créditos
+            </motion.button>
           </>
         )}
 
-        {/* CONTROLES */}
         {mostrarControles && (
-          <div style={superpuesto}>
-            <h2>🕹️ Controles</h2>
-            <ul>
+          <>
+            <h2 className="central-texto">🕹️ Controles</h2>
+            <ul style={{ color: 'white', listStyle: 'none', padding: 0 }}>
               <li>✔️ Buena acción = suma puntos</li>
               <li>❌ Mala acción = resta puntos</li>
-              <li>🚀 Ver el futuro = resultado</li>
+              <li>🚀 Ver el futuro = muestra el resultado</li>
             </ul>
-            <button onClick={() => setMostrarControles(false)} style={boton}>🔙 Volver</button>
-          </div>
+            <button className="start-button neon-button" onClick={() => setMostrarControles(false)}>🔙 Volver</button>
+          </>
         )}
 
-        {/* CRÉDITOS */}
         {mostrarCreditos && (
-          <div style={superpuesto}>
-            <h2>📜 Créditos</h2>
-            <p>Juego desarrollado por tu equipo ambiental 💚</p>
-            <p>Ilustraciones creadas con IA</p>
-            <button onClick={() => setMostrarCreditos(false)} style={boton}>🔙 Volver</button>
-          </div>
+          <>
+            <h2 className="central-texto">📜 Créditos</h2>
+            <p style={{ color: 'white' }}>Juego desarrollado por tu equipo ambiental 💚</p>
+            <p style={{ color: 'white' }}>Ilustraciones creadas con IA</p>
+            <button className="start-button neon-button" onClick={() => setMostrarCreditos(false)}>🔙 Volver</button>
+          </>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 export default Menu;
 
-const contenedorPrincipal: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  padding: '2rem',
+
+
+const titulo: React.CSSProperties = {
+  fontSize: '2rem',
+  marginBottom: '0.5rem',
+  textShadow: '0 0 10px #0ff',
 };
 
-const contenedorImagen: React.CSSProperties = {
-  position: 'relative',
-  width: '400px', // se ajusta visualmente al tamaño medio
+const subtitulo: React.CSSProperties = {
+  fontSize: '1rem',
+  marginBottom: '1.5rem',
 };
 
-const areaJugar: React.CSSProperties = {
-  position: 'absolute',
-  top: '200px',
-  left: '140px',
-  width: '240px',
-  height: '60px',
+const botonNeon: React.CSSProperties = {
+  display: 'block',
+  width: '100%',
+  margin: '0.5rem auto',
+  padding: '0.8rem 1rem',
+  fontSize: '1rem',
+  color: '#0ff',
+  background: 'transparent',
+  border: '2px solid #0ff',
+  borderRadius: '10px',
   cursor: 'pointer',
-  
+  transition: 'all 0.3s ease',
+  boxShadow: '0 0 8px #0ff',
 };
 
-const areaControles: React.CSSProperties = {
-  position: 'absolute',
-  top: '280px',
-  left: '140px',
-  width: '240px',
-  height: '60px',
-  cursor: 'pointer',
-  
-};
-
-const areaCreditos: React.CSSProperties = {
-  position: 'absolute',
-  top: '380px',
-  left: '140px',
-  width: '240px',
-  height: '60px',
-  cursor: 'pointer',
-  
-};
-
-const superpuesto: React.CSSProperties = {
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  right: '0',
-  bottom: '0',
-  backgroundColor: 'rgba(0,0,0,0.5)',
-  color: 'white',
-  padding: '1rem',
-  textAlign: 'center',
-  borderRadius: '12px',
-};
-
-const boton: React.CSSProperties = {
-  marginTop: '1rem',
-  padding: '0.5rem 1rem',
-  borderRadius: '6px',
-  border: 'none',
-  backgroundColor: '#4CAF50',
-  color: 'white',
-  cursor: 'pointer',
+const lista: React.CSSProperties = {
+  listStyle: 'none',
+  padding: 0,
+  margin: '1rem 0',
+  color: '#fff',
 };
 

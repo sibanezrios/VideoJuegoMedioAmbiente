@@ -1,26 +1,27 @@
-
 import React, { useState } from 'react';
 import Menu from './components/Menu';
 import campoLimpio from './assets/ImagenGranja.png';
 import feliz from './assets/ImagenGranjaFinalFeliz.png';
 import campoSucio from './assets/ImagenGranjaFinalTriste.png';
 import deforestado from './assets/ImagenGranjaFinalSinArboles.png';
+import Inicio from './components/inicio';
+
+type Fase = 'inicio' | 'menu' | 'juego';
+type Futuro = 'inicio' | 'positivo' | 'neutral' | 'negativo';
 
 function App() {
-  const [mostrarJuego, setMostrarJuego] = useState(false);
+  const [fase, setFase] = useState<Fase>('inicio');
 
   const [puntosPositivos, setPuntosPositivos] = useState(0);
   const [puntosNegativos, setPuntosNegativos] = useState(0);
-  const [futuroFinal, setFuturoFinal] = useState<string | null>(null);
-
-  type Futuro = "inicio" | "positivo" | "neutral" | "negativo";
+  const [futuroFinal, setFuturoFinal] = useState<Futuro | null>(null);
 
   const decidirFuturo = (positivos: number, negativos: number): Futuro => {
     const total = positivos - negativos;
-    if (total >= 5) return "positivo";
-    if (total > 0) return "neutral";
-    if (total === 0) return "inicio";
-    return "negativo";
+    if (total >= 5) return 'positivo';
+    if (total > 0) return 'neutral';
+    if (total === 0) return 'inicio';
+    return 'negativo';
   };
 
   const viajarAlFuturo = () => {
@@ -29,19 +30,23 @@ function App() {
   };
 
   const obtenerImagenFuturo = () => {
-    if (futuroFinal === "inicio") return campoLimpio;
-    if (futuroFinal === "positivo") return feliz;
-    if (futuroFinal === "neutral") return campoSucio;
-    if (futuroFinal === "negativo") return deforestado;
+    if (futuroFinal === 'inicio') return campoLimpio;
+    if (futuroFinal === 'positivo') return feliz;
+    if (futuroFinal === 'neutral') return campoSucio;
+    if (futuroFinal === 'negativo') return deforestado;
     return null;
   };
 
-  // Mostrar menú principal si no ha iniciado el juego
-  if (!mostrarJuego) {
-    return <Menu onStart={() => setMostrarJuego(true)} />;
+  // === Control por fases ===
+  if (fase === 'inicio') {
+    return <Inicio onStart={() => setFase('menu')} />;
   }
 
-  // Si ya empezó, mostrar el juego
+  if (fase === 'menu') {
+    return <Menu onStart={() => setFase('juego')} />;
+  }
+
+  // === Juego principal ===
   return (
     <div className="App" style={{ textAlign: 'center' }}>
       <h1>🌱 Juego Ambiental</h1>
@@ -61,6 +66,3 @@ function App() {
 }
 
 export default App;
-
-
-
