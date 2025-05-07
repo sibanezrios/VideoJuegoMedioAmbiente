@@ -1,0 +1,35 @@
+.nivel-con-fondo {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: 'Raleway', sans-serif;
+}
+
+.imagen-incendio,
+.imagen-bosque {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.15) contrast(1.1);
+  z-index: 0;
+}
+
+.imagen-incendio {
+  left: 0;
+}
+
+.imagen-bosque {
+  right: 0;
+}
+
+.contenido-nivel {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem;
+}

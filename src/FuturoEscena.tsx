@@ -46,15 +46,17 @@ const contenedor: React.CSSProperties = {
   padding: '2rem'
 };
 
+
 const boton: React.CSSProperties = {
   marginTop: '1rem',
-  padding: '10px 20px',
-  fontSize: '1rem',
-  borderRadius: '8px',
-  backgroundColor: '#4CAF50',
-  color: 'white',
-  border: 'none',
-  cursor: 'pointer'
+  padding: '12px 28px',
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+  borderRadius: '10px',
+  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
+  color: '#000',
+  border: '2px solid #00ffff',
+  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
 };
-
-

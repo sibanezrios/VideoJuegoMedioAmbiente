@@ -137,7 +137,7 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={{ marginTop: '20px' }}>
+        <button onClick={evaluarFuturo} style={boton}>
           Ver Futuro
         </button>
       )}
@@ -145,6 +145,20 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
   );
 };
 
+
+const boton: React.CSSProperties = {
+  marginTop: '1rem',
+  padding: '12px 28px',
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+  borderRadius: '10px',
+  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
+  color: '#000',
+  border: '2px solid #00ffff',
+  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+};
 export default MapaRio;
 
 
