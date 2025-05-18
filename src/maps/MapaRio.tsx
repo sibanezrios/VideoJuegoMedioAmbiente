@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
-import DecisionPopup from './DecisionPopup'; // Componente reutilizable de popup
-import bueno2 from './assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
-import medio2 from './assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
-import malo2 from './assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
-import rio from './assets/mapa_rio.png';  // Mapa del río
-import bosqueIcono from './assets/bosque.png';  // Icono del bosque
-import plantaIcono from './assets/planta.png';  // Icono de la planta industrial
-import muelleIcono from './assets/rio.png';  
-import { Future, FutureResults } from './constants';
+import DecisionPopup from '../DecisionPopup'; // Componente reutilizable de popup
+import bueno2 from '../assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
+import medio2 from '../assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
+import malo2 from '../assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
+import rio from '../assets/mapa_rio.png';  // Mapa del río
+import bosqueIcono from '../assets/bosque.png';  // Icono del bosque
+import plantaIcono from '../assets/planta.png';  // Icono de la planta industrial
+import muelleIcono from '../assets/rio.png';  
+import { Future, FutureResults } from '../constants';
 
 interface MapaRioProps {
   increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
@@ -22,21 +22,24 @@ function buildResults(type: Future, score: number): FutureResults {
         message: '¡El río está limpio y la comunidad está más saludable! 🎉',
         image: bueno2,
         type,
-        score
+        score,
+        title : 'El futuro del rio es muy bueno '
       }
     case Future.Medium:
       return {
         message: 'El río ha mejorado, pero aún queda trabajo por hacer. 🌱',
         image: medio2,
         type,
-        score
+        score,
+        title : 'Fl futuro del rio es prometedor pero...'
       }
     default:
       return {
         message: 'El río está muy contaminado y la comunidad está sufriendo. 💔',
         image: malo2,
         type,
-        score
+        score,
+        title : 'El futuro del rio esta como Venezuela, en decadencia'
       }
   }
 }

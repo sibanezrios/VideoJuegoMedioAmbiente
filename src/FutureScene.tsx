@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FutureResults } from './constants';
+import { FutureResults} from './constants';
 
 interface FutureSceneProps {
   results: FutureResults
@@ -9,12 +9,12 @@ interface FutureSceneProps {
 
 const FutureScene: React.FC<FutureSceneProps> = ({ results, onContinue }) => {
   const {
-    message, image, type
+    message, image, type,title
   } = results;
 
   return (
     <div style={contenedor}>
-      <h2>El Futuro del Barrio</h2>
+      <h2>{title}</h2>
       <img src={image} alt={`Futuro ${type}`} style={futureSceneStyles.image} />
       <p>{message}</p> {/* Mostramos el mensaje con el puntaje */}
       <button onClick={onContinue} style={boton}>Continuar</button> {/* Botón de continuar */}

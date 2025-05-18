@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
-import DecisionPopup from './DecisionPopup';  // Componente reutilable de popup
-import mapa from './assets/mapa_inicial.png';  // Mapa del barrio
-import bueno from './assets/futuro_bueno.png';  // Imagen para el futuro bueno
-import medio from './assets/futuro_medio.png';  // Imagen para el futuro medio
-import malo from './assets/futuro_malo.png';  // Imagen para el futuro malo
-import arbolIcono from './assets/arbol.png';  // Icono del árbol
-import fabricaIcono from './assets/fabrica.png';  // Icono de la fábrica
-import loteIcono from './assets/lote.png';  // Icono del lote baldío
-import { Future, FutureResults } from './constants';
+import DecisionPopup from '../DecisionPopup';  // Componente reutilable de popup
+import mapa from '../assets/mapa_inicial.png';  // Mapa del barrio
+import bueno from '../assets/futuro_bueno.png';  // Imagen para el futuro bueno
+import medio from '../assets/futuro_medio.png';  // Imagen para el futuro medio
+import malo from '../assets/futuro_malo.png';  // Imagen para el futuro malo
+import arbolIcono from '../assets/arbol.png';  // Icono del árbol
+import fabricaIcono from '../assets/fabrica.png';  // Icono de la fábrica
+import loteIcono from '../assets/lote.png';  // Icono del lote baldío
+import { Future, FutureResults } from '../constants';
 
 interface MapaBarrioProps {
   increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
@@ -22,21 +22,25 @@ function buildResults(type: Future, score: number): FutureResults {
         message: `¡Felicidades! Has creado un barrio saludable y sostenible. 🌳🎉 Puntaje: ${score}`,
         image: bueno,
         type,
-        score
+        score,
+        title : 'Futuro del barrio'
+
       }
     case Future.Medium:
       return {
         message: `Bien hecho, el barrio mejoró, pero aún hay trabajo por hacer. 🌱 Puntaje: ${score}`,
         image: medio,
         type,
-        score
+        score,
+        title : 'Futuro del barrio'
       }
     default:
       return {
         message: `El barrio empeoró. ¡Aún puedes mejorar! 💔 Puntaje: ${score}`,
         image: malo,
         type,
-        score
+        score,
+        title : 'Futuro del barrio'
       }
   }
 }

@@ -1,0 +1,5 @@
+
+
+1- Crear la propiedad title en FutureResults y colocal valor apropiado en cada mapa
+2- Crear una carpeta que se llame maps
+3- Crear una carpeta para cada mapa dentro de maps, es decir, una carpeta town, otra river y otra city. Colocar dentro de cada sus respectivos archivos: assets, tsx y lo que sea demás
