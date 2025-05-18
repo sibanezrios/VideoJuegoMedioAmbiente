@@ -75,23 +75,23 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
     rio: {  // Cambié "río" a "rio"
       pregunta: "¿Cómo vas a tratar la contaminación del río?",
       opciones: [
-        { texto: "Limpiar el río completamente", valor: "limpiar" },
-        { texto: "Construir una planta de tratamiento", valor: "invertir" },
-        { texto: "Dejar la contaminación tal como está", valor: "dejar" }
+        { texto: "Limpiar el río completamente, gastando dinero aunque no estaba presupestado, y destinarlo a la limpieza total del rio", valor: "limpiar" },
+        { texto: "Construir una planta de tratamiento, pero con los ingresos de 2 semanas de trabajo de funcionarios gubernamentales de clase baja", valor: "invertir" },
+        { texto: "Dejar la contaminación tal como está, ignorando las peticiones de los ciudadanos acerca de las enfermedades causadas por el rio, pero guardando el presupuesto.", valor: "dejar" }
       ]
     },
     bosque: {
       pregunta: "¿Vas a conservar el bosque cerca del río?",
       opciones: [
-        { texto: "Conservar el bosque", valor: "conservar" },
-        { texto: "Taladr el bosque para agricultura", valor: "taladrar" }
+        { texto: "Conservar el bosque, frenando el crecimiento econòmico local", valor: "conservar" },
+        { texto: "Talar el bosque para agricultura generando tambien un crecimeinto de la ganaderia en la zona", valor: "taladrar" }
       ]
     },
     planta: {
       pregunta: "¿Cómo vas a manejar la planta industrial cerca del río?",
       opciones: [
-        { texto: "Invertir en tecnologías limpias", valor: "invertir" },
-        { texto: "Cerrar la planta", valor: "cerrar" }
+        { texto: "Instalar filtros avanzados para reducir los desechos al minimo,y aprovechar el agua del rio para enfriar las maquinas sin desperdiciar desechos.", valor: "invertir" },
+        { texto: "Tratar las aguas residuales antes de verterlas al rio, solo cuando la produccion lo permita para no afectar la eficiencia de la fabrica", valor: "cerrar" }
       ]
     }
   };
