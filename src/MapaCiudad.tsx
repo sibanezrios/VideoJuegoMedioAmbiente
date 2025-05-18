@@ -1,19 +1,46 @@
 import React, { useState } from 'react';
+import muyBueno3 from './assets/futuro_bueno_ciudad.png';  // Imagen para el futuro muy bueno
+import medio3 from './assets/futuro_medio_ciudad.png';  // Imagen para el futuro medio
+import malo3 from './assets/futuro_malo_ciudad.png';  // Imagen para el futuro malo
 import DecisionPopup from './DecisionPopup'; // Popup reutilizable para las decisiones
 import ciudadFondo from './assets/ciudad_mapa.png'; // Imagen de fondo de la ciudad
 import plantaNuclearIcono from './assets/planta_energetica.png'; // Icono de la planta nuclear
 import zonaResidencialIcono from './assets/expansion.png'; // Icono de las zonas residenciales
 import carreteraIcono from './assets/transporte.png'; // Icono de las carreteras
-import FuturoEscena3 from './FuturoEscena3'; // Componente del futuro
-
-type Futuro = 'muy_bueno' | 'medio' | 'malo' | null;
+import { Future, FutureResults } from './constants';
 
 interface MapaCiudadProps {
-  setPuntos: React.Dispatch<React.SetStateAction<number>>;
-  setFuturo: React.Dispatch<React.SetStateAction<Futuro>>;
+  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
-const MapaCiudad: React.FC<MapaCiudadProps> = ({ setPuntos, setFuturo }) => {
+function buildResults(type: Future, score: number): FutureResults {
+  switch(type) {
+    case Future.VeryGood:
+      return {
+        message: `¡Felicidades! La ciudad ha crecido de manera sostenible. 🌳🎉 Puntaje: ${score}`,
+        image: muyBueno3,
+        type,
+        score
+      }
+    case Future.Medium:
+      return {
+        message: `La ciudad ha mejorado, pero aún quedan algunos problemas por resolver. 🌱 Puntaje: ${score}`,
+        image: medio3,
+        type,
+        score
+      }
+    default:
+      return {
+        message: `La ciudad ha empeorado, con consecuencias negativas a largo plazo. 💔 Puntaje: ${score}`,
+        image: malo3,
+        type,
+        score
+      }
+  }
+}
+
+const MapaCiudad: React.FC<MapaCiudadProps> = ({ increaseGlobalScore, setFutureResults }) => {
   // Estados para las decisiones
   const [plantaNuclearDecision, setPlantaNuclearDecision] = useState<string | null>(null);
   const [residencialDecision, setResidencialDecision] = useState<string | null>(null);
@@ -22,17 +49,11 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setPuntos, setFuturo }) => {
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'plantaNuclear' | 'residencial' | 'carretera'>(null);
 
-  // Estado para el futuro de la ciudad
-  const [futuro, setFuturoState] = useState<Futuro>(null);
-
-  // Puntos acumulados para las decisiones
-  const [puntos, setPuntosState] = useState(0);
-
   const todasTomadas = plantaNuclearDecision && residencialDecision && carreteraDecision;
 
   // Evaluamos el futuro basado en las decisiones y el puntaje
   function evaluarFuturo() {
-    let score = puntos;
+    let score = 0;
 
     // Evaluación de la planta nuclear
     if (plantaNuclearDecision === 'invertir') score++;
@@ -46,11 +67,10 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setPuntos, setFuturo }) => {
     if (carreteraDecision === 'invertir') score++;
     if (carreteraDecision === 'expandir') score--;
 
-    setPuntosState(score); // Actualizamos el puntaje
-
-    // Evaluamos el futuro de la ciudad con base en el puntaje
-    setFuturo(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo');
-    setFuturoState(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo'); // Actualizamos el futuro
+    const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
+    const results = buildResults(future,score);
+    increaseGlobalScore(score);
+    setFutureResults(results);
   }
 
   // Opciones para las decisiones del jugador
@@ -210,11 +230,6 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setPuntos, setFuturo }) => {
         <button onClick={evaluarFuturo} style={{ marginTop: '20px' }}>
           Ver Futuro
         </button>
-      )}
-
-      {/* Mostrar la escena futura cuando las decisiones estén completas */}
-      {futuro && (
-        <FuturoEscena3 futuro={futuro} puntos={puntos} onContinuar={() => alert('¡Nivel completado!')} />
       )}
     </div>
   );

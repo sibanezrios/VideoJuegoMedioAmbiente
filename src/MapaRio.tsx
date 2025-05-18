@@ -1,20 +1,47 @@
 
 import React, { useState } from 'react';
 import DecisionPopup from './DecisionPopup'; // Componente reutilizable de popup
-import FuturoEscena2 from './FuturoEscena2'; // Componente para mostrar el futuro del Nivel 2
+import bueno2 from './assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
+import medio2 from './assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
+import malo2 from './assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
 import rio from './assets/mapa_rio.png';  // Mapa del río
 import bosqueIcono from './assets/bosque.png';  // Icono del bosque
 import plantaIcono from './assets/planta.png';  // Icono de la planta industrial
-import muelleIcono from './assets/rio.png';  // Icono del muelle
-
-type Futuro = 'muy_bueno' | 'medio' | 'malo' | null;
+import muelleIcono from './assets/rio.png';  
+import { Future, FutureResults } from './constants';
 
 interface MapaRioProps {
-  setPuntos: React.Dispatch<React.SetStateAction<number>>;
-  setFuturo: React.Dispatch<React.SetStateAction<Futuro>>;
+  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
-const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
+function buildResults(type: Future, score: number): FutureResults {
+  switch(type) {
+    case Future.VeryGood:
+      return {
+        message: '¡El río está limpio y la comunidad está más saludable! 🎉',
+        image: bueno2,
+        type,
+        score
+      }
+    case Future.Medium:
+      return {
+        message: 'El río ha mejorado, pero aún queda trabajo por hacer. 🌱',
+        image: medio2,
+        type,
+        score
+      }
+    default:
+      return {
+        message: 'El río está muy contaminado y la comunidad está sufriendo. 💔',
+        image: malo2,
+        type,
+        score
+      }
+  }
+}
+
+const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults }) => {
   // Estados para las decisiones
   const [ríoDecision, setRíoDecision] = useState<string | null>(null);
   const [bosqueDecision, setBosqueDecision] = useState<string | null>(null);
@@ -23,28 +50,21 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'rio' | 'bosque' | 'planta'>(null); // Cambié "río" a "rio"
 
-  // Estado para mostrar el futuro
-  const [futuro, setFuturoState] = useState<Futuro>(null);
-
-  // Puntos acumulados para las decisiones
-  const [puntos, setPuntosState] = useState(0);
-
   const todasTomadas = ríoDecision && bosqueDecision && plantaDecision;
 
   // Evaluamos el futuro basado en el puntaje
   function evaluarFuturo() {
-    let score = puntos;
+    let score = 0;
 
     // Evaluación del río
     if (ríoDecision === "limpiar") score++;
     if (plantaDecision === "invertir") score++;
     if (bosqueDecision === "conservar") score++;
 
-    setPuntosState(score);  // Actualizamos el puntaje
-
-    // Evaluamos el futuro con base en el puntaje
-    setFuturo(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo');
-    setFuturoState(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo'); // Actualizamos el futuro
+    const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
+    const results = buildResults(future,score);
+    increaseGlobalScore(score);
+    setFutureResults(results);
   }
 
   // Opciones para las decisiones del jugador
@@ -137,7 +157,7 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={boton}>
+        <button onClick={evaluarFuturo} style={{ marginTop: '20px' }}>
           Ver Futuro
         </button>
       )}
@@ -145,20 +165,5 @@ const MapaRio: React.FC<MapaRioProps> = ({ setPuntos, setFuturo }) => {
   );
 };
 
-
-const boton: React.CSSProperties = {
-  marginTop: '1rem',
-  padding: '12px 28px',
-  fontSize: '1.1rem',
-  fontWeight: 'bold',
-  borderRadius: '10px',
-  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
-  color: '#000',
-  border: '2px solid #00ffff',
-  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
-};
 export default MapaRio;
-
 

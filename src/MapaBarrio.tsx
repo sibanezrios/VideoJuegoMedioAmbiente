@@ -1,22 +1,47 @@
 
 import React, { useState } from 'react';
 import DecisionPopup from './DecisionPopup';  // Componente reutilable de popup
-import FuturoEscena from './FuturoEscena';    // Componente para mostrar el futuro
 import mapa from './assets/mapa_inicial.png';  // Mapa del barrio
+import bueno from './assets/futuro_bueno.png';  // Imagen para el futuro bueno
+import medio from './assets/futuro_medio.png';  // Imagen para el futuro medio
+import malo from './assets/futuro_malo.png';  // Imagen para el futuro malo
 import arbolIcono from './assets/arbol.png';  // Icono del árbol
 import fabricaIcono from './assets/fabrica.png';  // Icono de la fábrica
 import loteIcono from './assets/lote.png';  // Icono del lote baldío
+import { Future, FutureResults } from './constants';
 
-// Declaramos los tipos posibles para el futuro
-type Futuro = 'muy_bueno' | 'medio' | 'malo' | null;
-
-// Definimos las propiedades que el componente MapaBarrio recibirá
 interface MapaBarrioProps {
-  setPuntos: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
-  setFuturo: React.Dispatch<React.SetStateAction<Futuro>>;  // Función para actualizar el futuro
+  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
-function MapaBarrio({ setPuntos, setFuturo }: MapaBarrioProps) {
+function buildResults(type: Future, score: number): FutureResults {
+  switch(type) {
+    case Future.VeryGood:
+      return {
+        message: `¡Felicidades! Has creado un barrio saludable y sostenible. 🌳🎉 Puntaje: ${score}`,
+        image: bueno,
+        type,
+        score
+      }
+    case Future.Medium:
+      return {
+        message: `Bien hecho, el barrio mejoró, pero aún hay trabajo por hacer. 🌱 Puntaje: ${score}`,
+        image: medio,
+        type,
+        score
+      }
+    default:
+      return {
+        message: `El barrio empeoró. ¡Aún puedes mejorar! 💔 Puntaje: ${score}`,
+        image: malo,
+        type,
+        score
+      }
+  }
+}
+
+function MapaBarrio({ increaseGlobalScore, setFutureResults }: MapaBarrioProps) {
   // Estados para las decisiones
   const [arbolDecision, setArbolDecision] = useState<string | null>(null);
   const [fabricaDecision, setFabricaDecision] = useState<string | null>(null);
@@ -25,29 +50,20 @@ function MapaBarrio({ setPuntos, setFuturo }: MapaBarrioProps) {
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'arbol' | 'fabrica' | 'lote'>(null);
 
-  // Estado para mostrar el futuro
-  const [futuro, setFuturoState] = useState<Futuro>(null);
-  
-  // Puntos acumulados para las decisiones
-  const [puntos, setPuntosState] = useState(0);
-
   // Comprobamos si todas las decisiones han sido tomadas
   const todasTomadas = arbolDecision && fabricaDecision && loteDecision;
 
   // Evaluamos el futuro basado en el puntaje de las decisiones
-  function evaluarFuturo() {
-    let score = puntos;
-
-    // Evaluación de la decisión del árbol
+  function evaluateFuture() {
+    let score = 0;
     if (arbolDecision === "conservar") score++;
     if (fabricaDecision === "modernizar") score++;
     if (loteDecision === "parque") score++;
 
-    setPuntosState(score);  // Actualizamos el puntaje
-
-    // Evaluamos el futuro con base en el puntaje
-    setFuturo(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo');
-    setFuturoState(score >= 3 ? 'muy_bueno' : score === 2 ? 'medio' : 'malo'); // Actualizamos el futuro
+    const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
+    const results = buildResults(future,score);
+    increaseGlobalScore(score);
+    setFutureResults(results);
   }
 
   // Opciones para las decisiones del jugador
@@ -138,7 +154,7 @@ function MapaBarrio({ setPuntos, setFuturo }: MapaBarrioProps) {
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo}  style={boton}>
+        <button onClick={evaluateFuture}  style={boton}>
           Ver Futuro
         </button>
       )}

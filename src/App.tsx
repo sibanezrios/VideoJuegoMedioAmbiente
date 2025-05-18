@@ -3,78 +3,82 @@ import Menu from './components/Menu';
 import Inicio from './components/inicio';
 import MapaBarrio from './MapaBarrio';
 import MapaRio from './MapaRio';
-import FuturoEscena from './FuturoEscena';
-import FuturoEscena2 from './FuturoEscena2';
 import MapaCiudad from './MapaCiudad';
-import FuturoEscena3 from './FuturoEscena3'; // Futuro para el nivel 3
 
 import fondoOscuro from './assets/fondoOscuro.jpg';
 import fondoClaro from './assets/fondoClaro.jpg';
 import './Nivel.css'; // asegúrate de que esté correctamente enlazado
-
-type Fase = 'inicio' | 'menu' | 'juego';
-type Futuro = 'muy_bueno' | 'medio' | 'malo' | null;
-
+import { Fase, FutureResults, Level } from './constants';
+import FutureScene from './FutureScene';
+ 
 function App() {
-  const [fase, setFase] = useState<Fase>('inicio');
-  const [nivel, setNivel] = useState(1);
-  const [futuro, setFuturo] = useState<Futuro>(null);
-  const [puntos, setPuntos] = useState(0);
+  const [fase, setFase] = useState<Fase>(Fase.Start);
+  const [level, setLevel] = useState<Level>(Level.Town);
+  const [futureResults, setFutureResults] = useState<FutureResults|null>(null);
+  const [score, setScore] = useState(0);
 
-  const avanzarNivel = () => {
-    setFuturo(null);
-    if (nivel === 1) setNivel(2); // Avanza del nivel 1 al 2
-    if (nivel === 2) setNivel(3); // Avanza del nivel 2 al 3
+  const levelUp = () => {
+    setFutureResults(null);
+    if (level === Level.Town) setLevel(Level.River); // Avanza del nivel 1 al 2
+    if (level === Level.River) setLevel(Level.City); // Avanza del nivel 2 al 3
   };
 
   // 👉 Scroll al top cuando entras al nivel 2 o 3
   useEffect(() => {
-    if (nivel === 2 || nivel === 3) {
+    if (level === Level.River|| level === Level.City) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [nivel]);
+  }, [level]);
 
   // === Fases ===
-  if (fase === 'inicio') {
-    return <Inicio onStart={() => setFase('menu')} />;
+  if (fase === Fase.Start) {
+    return <Inicio onStart={() => setFase(Fase.Menu)} />;
   }
 
-  if (fase === 'menu') {
-    return <Menu onStart={() => setFase('juego')} />;
+  if (fase === Fase.Menu) {
+    return <Menu onStart={() => setFase(Fase.Game)} />;
   }
 
   // === Fase juego ===
-  if (fase === 'juego') {
+  if (fase === Fase.Game) {
     return (
       <div className="nivel-con-fondo">
         <img src={fondoOscuro} alt="Fondo oscuro" className="imagen-incendio" />
         <img src={fondoClaro} alt="Fondo claro" className="imagen-bosque" />
 
         <div className="contenido-nivel">
-          {nivel === 1 ? (
+          {level === Level.Town ? (
             <>
               <h1>🌱 Juego Ambiental - Nivel 1: El Barrio</h1>
-              <MapaBarrio setPuntos={setPuntos} setFuturo={setFuturo} />
-              {futuro && (
-                <FuturoEscena
-                  tipo={futuro}
-                  puntos={puntos}
-                  onContinuar={avanzarNivel}
+              <MapaBarrio increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
+              {futureResults && (
+                <FutureScene
+                  results={futureResults!}
+                  onContinue={levelUp}
                 />
               )}
             </>
-          ) : nivel === 2 ? (
+          ) : level === Level.River ? (
             <>
               <h1>🌊 Juego Ambiental - Nivel 2: El Río</h1>
-              <MapaRio setPuntos={setPuntos} setFuturo={setFuturo} />
-              {futuro && <FuturoEscena2 futuro={futuro} puntos={puntos} onContinuar={avanzarNivel}
-                />}
+              <MapaRio increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
+              {futureResults && 
+              <FutureScene
+                  results={futureResults!}
+                  onContinue={levelUp}
+                />
+              }
             </>
           ) : (
             <>
               <h1>🌆 Juego Ambiental - Nivel 3: La Ciudad</h1>
-              <MapaCiudad setPuntos={setPuntos} setFuturo={setFuturo} />
-              {futuro && <FuturoEscena3 futuro={futuro} puntos={puntos} onContinuar={avanzarNivel} />}
+              <MapaCiudad increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
+              {futureResults && 
+              <FutureScene
+                results={futureResults!}
+                onContinue={levelUp}
+              />
+              }
             </>
           )}
         </div>
