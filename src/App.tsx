@@ -5,6 +5,8 @@ import MapaBarrio from './MapaBarrio';
 import MapaRio from './MapaRio';
 import FuturoEscena from './FuturoEscena';
 import FuturoEscena2 from './FuturoEscena2';
+import MapaCiudad from './MapaCiudad';
+import FuturoEscena3 from './FuturoEscena3'; // Futuro para el nivel 3
 
 import fondoOscuro from './assets/fondoOscuro.jpg';
 import fondoClaro from './assets/fondoClaro.jpg';
@@ -21,12 +23,13 @@ function App() {
 
   const avanzarNivel = () => {
     setFuturo(null);
-    if (nivel === 1) setNivel(2);
+    if (nivel === 1) setNivel(2); // Avanza del nivel 1 al 2
+    if (nivel === 2) setNivel(3); // Avanza del nivel 2 al 3
   };
 
-  // 👉 Scroll al top cuando entras al nivel 2
+  // 👉 Scroll al top cuando entras al nivel 2 o 3
   useEffect(() => {
-    if (nivel === 2) {
+    if (nivel === 2 || nivel === 3) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [nivel]);
@@ -60,11 +63,18 @@ function App() {
                 />
               )}
             </>
-          ) : (
+          ) : nivel === 2 ? (
             <>
               <h1>🌊 Juego Ambiental - Nivel 2: El Río</h1>
               <MapaRio setPuntos={setPuntos} setFuturo={setFuturo} />
-              {futuro && <FuturoEscena2 futuro={futuro} />}
+              {futuro && <FuturoEscena2 futuro={futuro} puntos={puntos} onContinuar={avanzarNivel}
+                />}
+            </>
+          ) : (
+            <>
+              <h1>🌆 Juego Ambiental - Nivel 3: La Ciudad</h1>
+              <MapaCiudad setPuntos={setPuntos} setFuturo={setFuturo} />
+              {futuro && <FuturoEscena3 futuro={futuro} puntos={puntos} onContinuar={avanzarNivel} />}
             </>
           )}
         </div>

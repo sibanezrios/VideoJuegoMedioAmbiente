@@ -22,4 +22,4 @@ class Rio {
       this.fauna = 'recuperada';
     }
   }
-  export {}
+  export {};
