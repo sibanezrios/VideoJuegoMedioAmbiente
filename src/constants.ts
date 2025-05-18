@@ -14,7 +14,8 @@ enum Future {
 enum Level {
   Town = 'Mapa del barrio',
   River = 'Mapa del Rio',
-  City = 'Mapa de la ciudad'
+  City = 'Mapa de la ciudad',
+  Global = 'Mapa del mundo'
 }
 
 export type FutureResults = {
@@ -25,8 +26,5 @@ export type FutureResults = {
   title: string 
 }
 
-export type levelName = {
-  title: string
-}
 
 export { Fase, Future, Level };
