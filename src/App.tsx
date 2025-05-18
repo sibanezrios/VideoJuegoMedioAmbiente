@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Menu from './components/Menu';
 import Inicio from './components/inicio';
-import MapaBarrio from './maps/MapaBarrio';
-import MapaRio from './maps/MapaRio';
-import MapaCiudad from './maps/MapaCiudad';
+import MapaBarrio from './maps/Town/MapaBarrio';
+import MapaRio from './maps/River/MapaRio';
+import MapaCiudad from './maps/City/MapaCiudad';
 
 import fondoOscuro from './assets/fondoOscuro.jpg';
 import fondoClaro from './assets/fondoClaro.jpg';

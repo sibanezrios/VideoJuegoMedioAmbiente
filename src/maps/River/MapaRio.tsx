@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
-import DecisionPopup from '../DecisionPopup'; // Componente reutilizable de popup
-import bueno2 from '../assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
-import medio2 from '../assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
-import malo2 from '../assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
-import rio from '../assets/mapa_rio.png';  // Mapa del río
-import bosqueIcono from '../assets/bosque.png';  // Icono del bosque
-import plantaIcono from '../assets/planta.png';  // Icono de la planta industrial
-import muelleIcono from '../assets/rio.png';  
-import { Future, FutureResults } from '../constants';
+import DecisionPopup from '../../DecisionPopup'; // Componente reutilizable de popup
+import bueno2 from './assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
+import medio2 from './assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
+import malo2 from './assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
+import rio from './assets/mapa_rio.png';  // Mapa del río
+import bosqueIcono from './assets/bosque.png';  // Icono del bosque
+import plantaIcono from './assets/planta.png';  // Icono de la planta industrial
+import muelleIcono from './assets/rio.png';  
+import { Future, FutureResults } from '../../constants';
 
 interface MapaRioProps {
   increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
@@ -39,7 +39,7 @@ function buildResults(type: Future, score: number): FutureResults {
         image: malo2,
         type,
         score,
-        title : 'El futuro del rio esta como Venezuela, en decadencia'
+        title : 'El futuro del rio esta en decadencia'
       }
   }
 }

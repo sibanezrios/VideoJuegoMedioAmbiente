@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import muyBueno3 from '../assets/futuro_bueno_ciudad.png';  // Imagen para el futuro muy bueno
-import medio3 from '../assets/futuro_medio_ciudad.png';  // Imagen para el futuro medio
-import malo3 from '../assets/futuro_malo_ciudad.png';  // Imagen para el futuro malo
-import DecisionPopup from '../DecisionPopup'; // Popup reutilizable para las decisiones
-import ciudadFondo from '../assets/ciudad_mapa.png'; // Imagen de fondo de la ciudad
-import plantaNuclearIcono from '../assets/planta_energetica.png'; // Icono de la planta nuclear
-import zonaResidencialIcono from '../assets/expansion.png'; // Icono de las zonas residenciales
-import carreteraIcono from '../assets/transporte.png'; // Icono de las carreteras
-import { Future, FutureResults } from '../constants';
+import muyBueno3 from './assets/futuro_bueno_ciudad.png';  // Imagen para el futuro muy bueno
+import medio3 from './assets/futuro_medio_ciudad.png';  // Imagen para el futuro medio
+import malo3 from './assets/futuro_malo_ciudad.png';  // Imagen para el futuro malo
+import DecisionPopup from '../../DecisionPopup'; // Popup reutilizable para las decisiones
+import ciudadFondo from './assets/ciudad_mapa.png'; // Imagen de fondo de la ciudad
+import plantaNuclearIcono from './assets/planta_energetica.png'; // Icono de la planta nuclear
+import zonaResidencialIcono from './assets/expansion.png'; // Icono de las zonas residenciales
+import carreteraIcono from './assets/transporte.png'; // Icono de las carreteras
+import { Future, FutureResults } from '../../constants';
 
 interface MapaCiudadProps {
   increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
