@@ -7,11 +7,17 @@ import loteIcono from './assets/lote.png'; // Icono del lote baldío
 import { Future, FutureResults } from '../../constants';
 import { buildResults } from './results';
 import { preguntasYOpciones } from './questions';
+import { Howl } from 'howler';
+import clickSound from './assets/sounds/click_sound.mp3';
+import selectOptionSound from './assets/sounds/select_option.mp3';
+import confirmSound from './assets/sounds/confirm_sound.mp3';
+import futureSound from './assets/sounds/future_sound.mp3';
+
+
 
 interface MapaBarrioProps {
-  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>; 
+  currentScore: number;
   setFutureResults: (results: FutureResults) => void; 
-  setProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // Función para mezclar las opciones de forma aleatoria
@@ -24,7 +30,7 @@ function shuffleOptions(options: { texto: string; valor: string }[]): { texto: s
   return shuffled;
 }
 
-function MapaBarrio({ increaseGlobalScore, setFutureResults, setProgress}: MapaBarrioProps) {
+function MapaBarrio({ currentScore, setFutureResults}: MapaBarrioProps) {
   // Estados para las decisiones
   const [arbolDecision, setArbolDecision] = useState<string | null>(null);
   const [fabricaDecision, setFabricaDecision] = useState<string | null>(null);
@@ -44,11 +50,8 @@ function MapaBarrio({ increaseGlobalScore, setFutureResults, setProgress}: MapaB
     if (fabricaDecision === 'modernizar') score++;
     if (loteDecision === 'parque') score++;
 
-    setProgress((prevProgress) => Math.min(prevProgress + score * 10, 100)); // Aumentamos la barra de progreso según el puntaje
-
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
-    increaseGlobalScore(score);
     setFutureResults(results);
   }
 
@@ -112,19 +115,6 @@ function MapaBarrio({ increaseGlobalScore, setFutureResults, setProgress}: MapaB
           }}
         />
       )}
-
-      {/* Barra de progreso */}
-      <div style={{ width: '100%', backgroundColor: '#e0e0e0', height: '20px', borderRadius: '10px' }}>
-        <div
-          style={{
-            width: `5%`,
-            backgroundColor: '#4CAF50',
-            height: '100%',
-            borderRadius: '10px',
-            transition: 'width 0.3s ease'
-          }}
-        />
-      </div>
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (

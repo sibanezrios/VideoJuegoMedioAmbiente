@@ -12,7 +12,7 @@ import renovable from './assets/renovable.png';
 import { Future, FutureResults } from '../../constants';
 
 interface MapaCrisisGlobalProps {
-  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  currentScore: number;
   setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
@@ -45,7 +45,7 @@ function buildResults(type: Future, score: number): FutureResults {
   }
 }
 
-const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore, setFutureResults }) => {
+const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFutureResults }) => {
   const [cambioClimaticoDecision, setCambioClimaticoDecision] = useState<string | null>(null);
   const [pandemiaDecision, setPandemiaDecision] = useState<string | null>(null);
   const [recursosDecision, setRecursosDecision] = useState<string | null>(null);
@@ -75,7 +75,6 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
-    increaseGlobalScore(score);
     setFutureResults(results);
   }
 

@@ -12,9 +12,10 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "framer-motion": "^12.10.4",
+    "howler": "^2.2.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-tsparticles": "^2.12.2",
     "tsparticles": "^3.8.1",
     "tsparticles-engine": "^2.12.0",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.12"
   }
 }

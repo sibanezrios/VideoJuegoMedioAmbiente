@@ -10,7 +10,7 @@ import muelleIcono from './assets/rio.png';
 import { Future, FutureResults } from '../../constants';
 
 interface MapaRioProps {
-  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  currentScore: number;
   setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
@@ -52,7 +52,7 @@ function shuffleOptions(options: { texto: string; valor: string }[]): { texto: s
 }
 
 
-const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults }) => {
+const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
   // Estados para las decisiones
   const [ríoDecision, setRíoDecision] = useState<string | null>(null);
   const [bosqueDecision, setBosqueDecision] = useState<string | null>(null);
@@ -77,7 +77,6 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future,score);
-    increaseGlobalScore(score);
     setFutureResults(results);
   }
 

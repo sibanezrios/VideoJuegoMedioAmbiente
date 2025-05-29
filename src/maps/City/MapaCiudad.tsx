@@ -10,7 +10,7 @@ import carreteraIcono from './assets/transporte.png';
 import { Future, FutureResults } from '../../constants';
 
 interface MapaCiudadProps {
-  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  
+  currentScore: number;
   setFutureResults: (results: FutureResults) => void; 
 }
 
@@ -52,7 +52,7 @@ function shuffleOptions(options: { texto: string; valor: string }[]): { texto: s
   return shuffled;
 }
 
-const MapaCiudad: React.FC<MapaCiudadProps> = ({ increaseGlobalScore, setFutureResults }) => {
+const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
   // Estados para las decisiones
   const [plantaNuclearDecision, setPlantaNuclearDecision] = useState<string | null>(null);
   const [residencialDecision, setResidencialDecision] = useState<string | null>(null);
@@ -84,7 +84,6 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ increaseGlobalScore, setFutureR
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future,score);
-    increaseGlobalScore(score);
     setFutureResults(results);
   }
 

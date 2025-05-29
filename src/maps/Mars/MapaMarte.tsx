@@ -10,11 +10,11 @@ import relacionesIcono from './assets/relaciones.png';  // Icono de relaciones i
 import { Future, FutureResults } from '../../constants';
 
 interface MapaMarteProps {
-  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;
   setFutureResults: (results: FutureResults) => void;
+  currentScore: number;
 }
 
-const MapaMarte: React.FC<MapaMarteProps> = ({ increaseGlobalScore, setFutureResults }) => {
+const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults,currentScore }) => {
   const [asentamientoDecision, setAsentamientoDecision] = useState<string | null>(null);
   const [recursosDecision, setRecursosDecision] = useState<string | null>(null);
   const [relacionesDecision, setRelacionesDecision] = useState<string | null>(null);
@@ -73,7 +73,6 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ increaseGlobalScore, setFutureRes
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
-    increaseGlobalScore(score);
     setFutureResults(results);
   }
 
