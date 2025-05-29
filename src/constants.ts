@@ -15,7 +15,8 @@ enum Level {
   Town = 'Mapa del barrio',
   River = 'Mapa del Rio',
   City = 'Mapa de la ciudad',
-  Global = 'Mapa del mundo'
+  Global = 'Mapa del mundo',
+  Mars ='Mapa de marte'
 }
 
 export type FutureResults = {

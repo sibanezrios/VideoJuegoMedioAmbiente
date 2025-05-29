@@ -5,13 +5,14 @@ import MapaBarrio from './maps/Town/MapaBarrio';
 import MapaRio from './maps/River/MapaRio';
 import MapaCiudad from './maps/City/MapaCiudad';
 import MapaCrisisGlobal from './maps/GlobalCrisis/MapaCrisisGlobal';
+import MapaMarte from './maps/Mars/MapaMarte';  // Nuevo mapa para el nivel 5
 
 import fondoOscuro from './assets/fondoOscuro.jpg';
 import fondoClaro from './assets/fondoClaro.jpg';
 import './Nivel.css'; // asegúrate de que esté correctamente enlazado
 import { Fase, FutureResults, Level } from './constants';
 import FutureScene from './FutureScene';
-import CargarPartida from './CargarPartida'; // Importar el componente de guardar partida
+import CargarPartida from './CargarPartida'; // Importar el componente de cargar partida
 
 function App() {
   const [fase, setFase] = useState<Fase>(Fase.Start);
@@ -25,6 +26,7 @@ function App() {
     if (level === Level.Town) setLevel(Level.River); // Avanza del nivel 1 al 2
     if (level === Level.River) setLevel(Level.City); // Avanza del nivel 2 al 3
     if (level === Level.City) setLevel(Level.Global); // Avanza del nivel 3 al 4
+    if (level === Level.Global) setLevel(Level.Mars); // Avanza del nivel 4 al 5 (Marte)
   };
 
   // Cargar partidas desde localStorage al inicio
@@ -46,9 +48,9 @@ function App() {
     setPartidas((prevPartidas) => [...prevPartidas, partida]);
   };
 
-  // 👉 Scroll al top cuando entras al nivel 2 o 3
+  // 👉 Scroll al top cuando entras al nivel 2, 3, 4 o 5
   useEffect(() => {
-    if (level === Level.River || level === Level.City || level === Level.Global) {
+    if (level === Level.River || level === Level.City || level === Level.Global || level === Level.Mars) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [level]);
@@ -90,13 +92,24 @@ function App() {
               <MapaCiudad increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
               {futureResults && <FutureScene results={futureResults!} onContinue={levelUp} />}
             </>
-          ) : (
+          ) : level === Level.Global ? (
             <>
               <h1>🌍 Juego Ambiental - Nivel 4: Crisis Global y Colaboración Internacional</h1>
               <MapaCrisisGlobal increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
               {futureResults && <FutureScene results={futureResults!} onContinue={levelUp} />}
             </>
+          ) : (
+            <>
+              <h1>🚀 Juego Ambiental - Nivel 5: El Último Umbral: Evitar la Autodestrucción Global</h1>
+              <MapaMarte increaseGlobalScore={setScore} setFutureResults={setFutureResults} />
+              {futureResults && <FutureScene results={futureResults!} onContinue={levelUp} />}
+            </>
           )}
+        </div>
+
+        {/* Barra de progreso global */}
+        <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
+          <div style={{ width: `${(score / 100) * 100}%`, height: '100%', backgroundColor: '#4CAF50' }}></div>
         </div>
       </div>
     );

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DecisionPopup from '../../DecisionPopup'; // Componente reutilizable de popup
 import bueno2 from './assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
@@ -23,7 +22,7 @@ function buildResults(type: Future, score: number): FutureResults {
         image: bueno2,
         type,
         score,
-        title : 'El futuro del rio es muy bueno '
+        title : 'El futuro del rio alcanzó su versión ideal'
       }
     case Future.Medium:
       return {
@@ -31,7 +30,7 @@ function buildResults(type: Future, score: number): FutureResults {
         image: medio2,
         type,
         score,
-        title : 'Fl futuro del rio es prometedor pero...'
+        title : 'El futuro del rio es prometedor, pero...'
       }
     default:
       return {
@@ -39,16 +38,26 @@ function buildResults(type: Future, score: number): FutureResults {
         image: malo2,
         type,
         score,
-        title : 'El futuro del rio esta en decadencia'
+        title : 'El futuro del rio ha alcanzado el declive máximo'
       }
   }
 }
+function shuffleOptions(options: { texto: string; valor: string }[]): { texto: string; valor: string }[] {
+  const shuffled = [...options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 
 const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults }) => {
   // Estados para las decisiones
   const [ríoDecision, setRíoDecision] = useState<string | null>(null);
   const [bosqueDecision, setBosqueDecision] = useState<string | null>(null);
   const [plantaDecision, setPlantaDecision] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'rio' | 'bosque' | 'planta'>(null); // Cambié "río" a "rio"
@@ -64,6 +73,8 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
     if (plantaDecision === "invertir") score++;
     if (bosqueDecision === "conservar") score++;
 
+    setProgress(prevProgress => Math.min(prevProgress + 10, 100));
+
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future,score);
     increaseGlobalScore(score);
@@ -75,23 +86,23 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
     rio: {  // Cambié "río" a "rio"
       pregunta: "¿Cómo vas a tratar la contaminación del río?",
       opciones: [
-        { texto: "Limpiar el río completamente, gastando dinero aunque no estaba presupestado, y destinarlo a la limpieza total del rio", valor: "limpiar" },
+        { texto: "Limpiar el río completamente, gastando dinero aunque no estaba presupuestado, y destinarlo a la limpieza total del río", valor: "limpiar" },
         { texto: "Construir una planta de tratamiento, pero con los ingresos de 2 semanas de trabajo de funcionarios gubernamentales de clase baja", valor: "invertir" },
-        { texto: "Dejar la contaminación tal como está, ignorando las peticiones de los ciudadanos acerca de las enfermedades causadas por el rio, pero guardando el presupuesto.", valor: "dejar" }
+        { texto: "Dejar la contaminación tal como está, ignorando las peticiones de los ciudadanos acerca de las enfermedades causadas por el río, pero guardando el presupuesto.", valor: "dejar" }
       ]
     },
     bosque: {
       pregunta: "¿Vas a conservar el bosque cerca del río?",
       opciones: [
-        { texto: "Conservar el bosque, frenando el crecimiento econòmico local", valor: "conservar" },
-        { texto: "Talar el bosque para agricultura generando tambien un crecimeinto de la ganaderia en la zona", valor: "taladrar" }
+        { texto: "Conservar el bosque, frenando el crecimiento económico local", valor: "conservar" },
+        { texto: "Talar el bosque para agricultura generando también un crecimiento de la ganadería en la zona", valor: "taladrar" }
       ]
     },
     planta: {
       pregunta: "¿Cómo vas a manejar la planta industrial cerca del río?",
       opciones: [
-        { texto: "Instalar filtros avanzados para reducir los desechos al minimo,y aprovechar el agua del rio para enfriar las maquinas sin desperdiciar desechos.", valor: "invertir" },
-        { texto: "Tratar las aguas residuales antes de verterlas al rio, solo cuando la produccion lo permita para no afectar la eficiencia de la fabrica", valor: "cerrar" }
+        { texto: "Instalar filtros avanzados para reducir los desechos al mínimo, y aprovechar el agua del río para enfriar las máquinas sin desperdiciar desechos.", valor: "invertir" },
+        { texto: "Tratar las aguas residuales antes de verterlas al río, solo cuando la producción lo permita para no afectar la eficiencia de la fábrica", valor: "cerrar" }
       ]
     }
   };
@@ -146,7 +157,7 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
   <DecisionPopup
     tipo={popup === 'rio' ? 'rio' : popup === 'bosque' ? 'bosque' : 'planta'}  // Aquí se pasa el tipo adecuado según el popup
     pregunta={preguntasYOpciones[popup].pregunta}
-    opciones={preguntasYOpciones[popup].opciones}
+    opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Usar la función shuffle para desordenar las opciones
     onClose={() => setPopup(null)}
     onSelect={(decision: string) => {
       if (popup === "rio") setRíoDecision(decision);
@@ -157,10 +168,14 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
   />
 )}
 
+      {/* Barra de progreso */}
+      <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
+        <div style={{ width: `${progress}%`, height: '100%', backgroundColor: '#4CAF50' }}></div>
+      </div>
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={{ marginTop: '20px' }}>
+        <button onClick={evaluarFuturo} style={boton}>
           Ver Futuro
         </button>
       )}
@@ -168,5 +183,19 @@ const MapaRio: React.FC<MapaRioProps> = ({ increaseGlobalScore, setFutureResults
   );
 };
 
-export default MapaRio;
+// Estilo del botón
+const boton: React.CSSProperties = {
+  marginTop: '1rem',
+  padding: '12px 28px',
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+  borderRadius: '10px',
+  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
+  color: '#000',
+  border: '2px solid #00ffff',
+  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+};
 
+export default MapaRio;

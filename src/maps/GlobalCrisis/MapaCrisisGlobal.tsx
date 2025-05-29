@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DecisionPopup from '../../DecisionPopup'; // Componente reutilizable de popup
+import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup
 import mundoFondo from './assets/mundo_mapa.png';
 import clima from './assets/clima.png';
 import pandemia from './assets/pandemia.png';
@@ -11,40 +11,38 @@ import salud from './assets/salud.png';
 import renovable from './assets/renovable.png';
 import { Future, FutureResults } from '../../constants';
 
-
 interface MapaCrisisGlobalProps {
-    increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
-    setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
+  increaseGlobalScore: React.Dispatch<React.SetStateAction<number>>;  // Función para actualizar los puntos
+  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
-  
+
 function buildResults(type: Future, score: number): FutureResults {
-    switch(type) {
-      case Future.VeryGood:
-        return {
-          message: `¡Felicidades! La ciudad ha crecido de manera sostenible. 🌳🎉 Puntaje: ${score}`,
-          image: muyBueno4,
-          type,
-          score,
-          title : 'Futuro del ciudad'
-          
-        }
-      case Future.Medium:
-        return {
-          message: `La ciudad ha mejorado, pero aún quedan algunos problemas por resolver. 🌱 Puntaje: ${score}`,
-          image: medio4,
-          type,
-          score,
-          title : 'Futuro del ciudad'
-        }
-      default:
-        return {
-          message: `La ciudad ha empeorado, con consecuencias negativas a largo plazo. 💔 Puntaje: ${score}`,
-          image: malo4,
-          type,
-          score,
-          title : 'Futuro del ciudad'
-        }
-    }
+  switch (type) {
+    case Future.VeryGood:
+      return {
+        message: `¡Felicidades! El mundo ha logrado equilibrar sus problemas globales. 🌍🎉 Puntaje: ${score}`,
+        image: muyBueno4,
+        type,
+        score,
+        title: 'Futuro del mundo'
+      }
+    case Future.Medium:
+      return {
+        message: `El mundo ha mejorado, pero aún hay desafíos por resolver. 🌱 Puntaje: ${score}`,
+        image: medio4,
+        type,
+        score,
+        title: 'Futuro del mundo'
+      }
+    default:
+      return {
+        message: `La crisis global sigue empeorando, con consecuencias negativas a largo plazo. 💔 Puntaje: ${score}`,
+        image: malo4,
+        type,
+        score,
+        title: 'Futuro del mundo'
+      }
+  }
 }
 
 const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore, setFutureResults }) => {
@@ -55,7 +53,6 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore
   const [popup, setPopup] = useState<null | 'cambioClimatico' | 'pandemia' | 'recursos'>(null);
 
   const todasTomadas = cambioClimaticoDecision && pandemiaDecision && recursosDecision;
-
 
   // Evaluamos el futuro basado en las decisiones y el puntaje
   function evaluarFuturo() {
@@ -77,7 +74,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore
     }
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
-    const results = buildResults(future,score);
+    const results = buildResults(future, score);
     increaseGlobalScore(score);
     setFutureResults(results);
   }
@@ -182,5 +179,3 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ increaseGlobalScore
 };
 
 export default MapaCrisisGlobal;
-
-

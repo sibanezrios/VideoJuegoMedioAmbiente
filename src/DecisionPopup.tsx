@@ -3,7 +3,7 @@
 import React from 'react';
 
 type DecisionPopupProps = {
-  tipo: 'arbol' | 'fabrica' | 'lote' | 'rio' | 'bosque' | 'planta'|'plantaNuclear' | 'residencial' | 'carretera'| 'recursos'|'cambioClimatico'|'pandemia';  // Permitimos ambos conjuntos de valores
+  tipo: 'arbol' | 'fabrica' | 'lote' | 'rio' | 'bosque' | 'planta'|'plantaNuclear' | 'residencial' | 'carretera'| 'recursos'|'cambioClimatico'|'pandemia'|'asentamiento'|'recursos'|'relaciones';  // Permitimos ambos conjuntos de valores
   pregunta: string;
   opciones: { texto: string; valor: string }[];
   onClose: () => void;
