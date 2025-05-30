@@ -53,6 +53,7 @@ function Game() {
     if (level === Level.River) setLevel(Level.City); // Avanza del nivel 2 al 3
     if (level === Level.City) setLevel(Level.Global); // Avanza del nivel 3 al 4
     if (level === Level.Global) setLevel(Level.Mars); // Avanza del nivel 4 al 5 (Marte)
+    if (level === Level.Mars) setLevel(Level.Town);
   };
 
   // 👉 Scroll al top cuando entras al nivel 2, 3, 4 o 5

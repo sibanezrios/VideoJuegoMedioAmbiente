@@ -12,6 +12,10 @@
   background-size: cover; /* Asegura que cubra toda la pantalla */
   background-position: center; /* Centra la imagen */
   color: white;
+  padding: 0 20px; /* Añadir padding horizontal para evitar que se corte el contenido */
+  border: 2px solid transparent; /* Borde transparente para aplicar el borde de neón */
+  box-shadow: 0 0 15px #00ffff, 0 0 30px #00b3b3; /* Efecto de borde neón */
+  animation: neon-flicker 1.5s infinite alternate;
 }
 
 
@@ -108,10 +112,33 @@
   box-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
 }
 
-@keyframes flicker {
-  0% { opacity: 0.6; box-shadow: 0 0 8px #0ff; }
-  50% { opacity: 1; box-shadow: 0 0 20px #0ff; }
-  100% { opacity: 0.8; box-shadow: 0 0 12px #0ff; }
+@keyframes neon-flicker {
+  0% {
+    box-shadow: 0 0 15px #00ffff, 0 0 30px #00b3b3;
+  }
+  50% {
+    box-shadow: 0 0 30px #00ffff, 0 0 45px #00b3b3;
+  }
+  100% {
+    box-shadow: 0 0 15px #00ffff, 0 0 30px #00b3b3;
+  }
+}
+
+/* Mejoramos el estilo del mapa con más suavidad */
+.mapa-style {
+  width: 100%;
+  max-width: 1000px; /* Limitar el tamaño máximo de la imagen */
+  height: auto; /* Mantener la relación de aspecto original */
+  padding: 0 10px; /* Reducir padding */
+  border: 4px solid #00ffff; /* Borde más grueso para darle más presencia */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 0 20px #00ffff, 0 0 30px #00b3b3; /* Sombras más suaves y brillantes */
+  animation: neon-flicker 2s infinite alternate; /* Animación suave */
+  transition: transform 0.3s ease-in-out; /* Suavizar el efecto de transformación */
+}
+
+.mapa-style:hover {
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño de la imagen cuando pasa el ratón */
 }
 
 /* Cuadro central */
