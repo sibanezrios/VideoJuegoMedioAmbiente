@@ -1,3 +1,68 @@
+
+.contexto-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  background-image: url('../assets/politics_background.png'); /* Nueva imagen de fondo */
+  background-size: cover; /* Asegura que cubra toda la pantalla */
+  background-position: center; /* Centra la imagen */
+  color: white;
+}
+
+
+/* Cuadro central */
+.contexto-box {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para el cuadro central */
+  padding: 3rem 4rem; /* Aumentar el padding para mejorar la distribución */
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 25px #0ff; /* Sombra más intensa */
+  backdrop-filter: blur(10px); /* Desenfoque del fondo */
+  width: 80%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem; /* Espacio entre los elementos */
+  height: 80%; /* Asegura que el cuadro tenga la altura adecuada */
+}
+
+/* Título con sombra de neón */
+.contexto-titulo {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00b3b3;
+}
+
+/* Descripción con sombra de neón */
+.contexto-descripcion {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-shadow: 0 0 8px #00ffff, 0 0 15px #00b3b3, 0 0 25px #00ffcc;
+}
+
+/* Objetivo */
+.contexto-objetivo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+}
+
+.contexto-objetivo-descripcion {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
 .inicio-dual-bg {
   width: 100vw;
   height: 100vh;

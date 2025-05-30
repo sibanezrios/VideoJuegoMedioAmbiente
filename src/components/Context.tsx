@@ -2,8 +2,10 @@ import React from 'react';
 import { Level } from '../constants';
 import { motion } from 'framer-motion';
 
+
+
 interface IntroduccionProps {
-  nivel: Level;  // Asegúrate de que esto esté tipado como Level
+  nivel: Level;
   onStart: () => void;
 }
 
