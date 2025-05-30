@@ -42,7 +42,6 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
   const [plantaNuclearDecision, setPlantaNuclearDecision] = useState<string | null>(null);
   const [residencialDecision, setResidencialDecision] = useState<string | null>(null);
   const [carreteraDecision, setCarreteraDecision] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
 
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'plantaNuclear' | 'residencial' | 'carretera'>(null);
@@ -65,8 +64,6 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
     if (carreteraDecision === 'invertir') score++;
     if (carreteraDecision === 'expandir') score--;
 
-    setProgress(prevProgress => Math.min(prevProgress + 10, 100)); // Actualizamos la barra de progreso
-
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
     setFutureResults(results);
@@ -76,8 +73,14 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
   }
 
   return (
-    <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
-      <img src={ciudadFondo} alt="Mapa de la ciudad" style={{ width: '100%' }} />
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+      {/* Imagen del mapa de la ciudad con borde neón */}
+      <img src={ciudadFondo} alt="Mapa de la ciudad" style={{ 
+        width: '100%', 
+        border: '2px solid transparent', 
+        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3', // Borde neón en la imagen
+        animation: 'neon-flicker 1.5s infinite alternate'
+      }} />
 
       {/* Elementos interactivos */}
       <img
@@ -91,11 +94,11 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
         }}
         style={{
           position: 'absolute',
-          top: '200px',
-          left: '100px',  // Cambié el left para la zona residencial
-          width: '90px',
+          top: '200px',  // Ajuste de la posición
+          left: '100px', // Ajuste de la posición
+          width: '90px', // Tamaño ajustado
           cursor: residencialDecision ? 'default' : 'pointer',
-          opacity: residencialDecision ? 0.4 : 1
+          opacity: residencialDecision ? 0.4 : 1,
         }}
       />
       <img
@@ -109,11 +112,11 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
         }}
         style={{
           position: 'absolute',
-          top: '150px',
-          right: '120px', 
-          width: '80px',
+          top: '150px', 
+          right: '120px',  // Ajuste de la posición
+          width: '80px',  // Tamaño ajustado
           cursor: plantaNuclearDecision ? 'default' : 'pointer',
-          opacity: plantaNuclearDecision ? 0.4 : 1
+          opacity: plantaNuclearDecision ? 0.4 : 1,
         }}
       />
       <img
@@ -127,11 +130,11 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
         }}
         style={{
           position: 'absolute',
-          bottom: '80px',
-          left: '300px',
-          width: '90px',
+          bottom: '80px',  // Ajuste para la parte inferior
+          left: '300px',   // Ajuste de la posición
+          width: '90px',   // Tamaño ajustado
           cursor: carreteraDecision ? 'default' : 'pointer',
-          opacity: carreteraDecision ? 0.4 : 1
+          opacity: carreteraDecision ? 0.4 : 1,
         }}
       />
 
@@ -140,7 +143,7 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
         <DecisionPopup
           tipo={popup}
           pregunta={preguntasYOpciones[popup].pregunta}
-          opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Usar la función shuffle para desordenar las opciones
+          opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Revolvemos las opciones
           onClose={() => setPopup(null)}
           onSelect={(decision: string) => {
             if (popup === 'plantaNuclear') setPlantaNuclearDecision(decision);
@@ -151,11 +154,6 @@ function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
           }}
         />
       )}
-
-      {/* Barra de progreso */}
-      <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
-        <div style={{ width: `${progress}%`, height: '100%', backgroundColor: '#4CAF50' }}></div>
-      </div>
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (

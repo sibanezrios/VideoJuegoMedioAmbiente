@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup 
-import mundoFondo from './assets/mundo_mapa.png';
+import mundoFondo from './assets/mundo_mapa.png'; 
 import clima from './assets/clima.png';
 import pandemia from './assets/pandemia.png';
 import personas from './assets/personas.png';
@@ -64,10 +64,16 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
   }
 
   return (
-    <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
-      <img src={mundoFondo} alt="Mapa del mundo" style={{ width: '100%' }} />
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+      {/* Imagen del mapa del mundo con borde neón */}
+      <img src={mundoFondo} alt="Mapa del mundo" style={{ 
+        width: '100%', 
+        border: '2px solid transparent', 
+        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3', // Borde neón en la imagen
+        animation: 'neon-flicker 1.5s infinite alternate'
+      }} />
 
-      {/* Elementos interactivos */}
+      {/* Elementos interactivos sin borde neón */}
       <img
         src={clima}
         alt="Cambio climático"
@@ -83,7 +89,7 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
           left: '50px',
           width: '90px',
           cursor: cambioClimaticoDecision ? 'default' : 'pointer',
-          opacity: cambioClimaticoDecision ? 0.4 : 1
+          opacity: cambioClimaticoDecision ? 0.4 : 1,
         }}
       />
       <img
@@ -101,7 +107,7 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
           right: '120px',
           width: '80px',
           cursor: pandemiaDecision ? 'default' : 'pointer',
-          opacity: pandemiaDecision ? 0.4 : 1
+          opacity: pandemiaDecision ? 0.4 : 1,
         }}
       />
       <img
@@ -119,7 +125,7 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
           left: '300px',
           width: '90px',
           cursor: recursosDecision ? 'default' : 'pointer',
-          opacity: recursosDecision ? 0.4 : 1
+          opacity: recursosDecision ? 0.4 : 1,
         }}
       />
 
@@ -142,18 +148,30 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button
-          onClick={() => {
-            evaluarFuturo();
-            playSound(futureSound); // Sonido al ver el futuro
-          }}
-          style={{ marginTop: '20px' }}
-        >
+        <button onClick={() => {
+          evaluarFuturo();
+          playSound(futureSound); // Sonido al ver el futuro
+        }} style={boton}>
           Ver Futuro
         </button>
       )}
     </div>
   );
+};
+
+// Estilo del botón
+const boton: React.CSSProperties = {
+  marginTop: '1rem',
+  padding: '12px 28px',
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+  borderRadius: '10px',
+  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
+  color: '#000',
+  border: '2px solid #00ffff',
+  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
 };
 
 export default MapaCrisisGlobal;

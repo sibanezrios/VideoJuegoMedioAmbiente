@@ -4,6 +4,7 @@ import Inicio from './components/inicio';
 import './Nivel.css'; // asegúrate de que esté correctamente enlazado
 import { Fase } from './constants';
 import Game from './components/Game';
+import FinalScene from './components/FinalScene';
 
 function App() {
   const [fase, setFase] = useState<Fase>(Fase.Start);
@@ -19,9 +20,16 @@ function App() {
 
   // === Fase juego ===
   if (fase === Fase.Game) {
-    return <Game />;
+    return <Game onFinish={() => setFase(Fase.End)}/>;
   }
 
+  if (fase === Fase.End) {
+    return <FinalScene onFinish={() => setFase(Fase.End)} progress={0}/>;
+  }
+
+  if (fase === Fase.End) {
+    return <FinalScene onFinish={() => setFase(Fase.Start)} progress={0}/>;
+  }
   return null;
 }
 

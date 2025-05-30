@@ -2,7 +2,8 @@
 enum Fase {
   Start,
   Menu,
-  Game
+  Game,
+  End
 }
 
 enum Future {
@@ -26,6 +27,8 @@ export type FutureResults = {
   type: Future,
   title: string 
 }
+
+
 
 
 export { Fase, Future, Level };

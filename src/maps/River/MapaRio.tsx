@@ -12,6 +12,7 @@ import clickSound from './assets/sounds/select_option.mp3';
 import selectOptionSound from './assets/sounds/select_option.mp3';
 import confirmSound from './assets/sounds/confirm_sound.mp3';
 import futureSound from './assets/sounds/future_sound.mp3';
+import { mapaStyle } from './styles/mapaStyle';
 
 interface MapaRioProps {
   currentScore: number;
@@ -42,7 +43,6 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
   const [ríoDecision, setRíoDecision] = useState<string | null>(null);
   const [bosqueDecision, setBosqueDecision] = useState<string | null>(null);
   const [plantaDecision, setPlantaDecision] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0); // Barra de progreso
 
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'rio' | 'bosque' | 'planta'>(null); // Cambié "río" a "rio"
@@ -58,8 +58,6 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
     if (plantaDecision === "invertir") score++;
     if (bosqueDecision === "conservar") score++;
 
-    setProgress(prevProgress => Math.min(prevProgress + 10, 100)); // Actualizamos la barra de progreso
-
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
     setFutureResults(results);
@@ -69,10 +67,10 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
   }
 
   return (
-    <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
-      <img src={rio} alt="Mapa del río" style={{ width: '100%' }} />
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+    <img src={rio} alt="Mapa del río" style={mapaStyle} />
 
-      {/* Elementos interactivos */}
+      {/* Elementos interactivos con iconos más pequeños y ubicados de manera estratégica */}
       <img
         src={bosqueIcono}
         alt="Bosque"
@@ -84,9 +82,9 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
         }}
         style={{
           position: 'absolute',
-          top: '200px',
-          left: '100px',
-          width: '80px',
+          top: '150px', // Ajuste basado en el mapa original
+          left: '120px', // Ubicación ajustada para que quede en la zona del bosque
+          width: '70px', // Tamaño ajustado para que sea discreto
           cursor: bosqueDecision ? 'default' : 'pointer',
           opacity: bosqueDecision ? 0.4 : 1
         }}
@@ -102,9 +100,9 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
         }}
         style={{
           position: 'absolute',
-          top: '150px',
-          right: '120px',
-          width: '90px',
+          top: '220px', // Ajuste basado en el mapa original
+          right: '180px', // Ubicación ajustada para que quede en la zona industrial
+          width: '80px', // Tamaño ajustado para que sea discreto
           cursor: plantaDecision ? 'default' : 'pointer',
           opacity: plantaDecision ? 0.4 : 1
         }}
@@ -120,14 +118,13 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
         }}
         style={{
           position: 'absolute',
-          bottom: '80px',
-          left: '300px',
-          width: '90px',
+          bottom: '100px', // Ajuste de la posición en la parte inferior
+          left: '350px', // Ubicación ajustada cerca del río
+          width: '80px', // Tamaño ajustado para que sea discreto
           cursor: ríoDecision ? 'default' : 'pointer',
           opacity: ríoDecision ? 0.4 : 1
         }}
       />
-
       {/* Mostrar popup de decisiones */}
       {popup && (
         <DecisionPopup
@@ -144,11 +141,6 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
           }}
         />
       )}
-
-      {/* Barra de progreso */}
-      <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
-        <div style={{ width: `${progress}%`, height: '100%', backgroundColor: '#4CAF50' }}></div>
-      </div>
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FutureResults, Level } from "../constants";
+import { FutureResults, Level,Fase } from "../constants";
 import MapaBarrio from "../maps/Town/MapaBarrio";
 import FutureScene from "../FutureScene";
 import MapaRio from "../maps/River/MapaRio";
@@ -11,15 +11,20 @@ import fondoClaro from '../assets/fondoClaro.jpg';
 import { Howl } from "howler"; // Importar howler para la música
 import musica from '../assets/sounds/background_music.mp3';
 import Introduccion from './Context'; // Importamos el componente de introducción
+import FinalScene from "./FinalScene";
 
-function Game() {
+interface GameProps {
+  onFinish: () => void;
+}
+
+const Game: React.FC<GameProps> = ({onFinish}) => {
   const [level, setLevel] = useState<Level>(Level.Town); // Nivel inicial
   const [futureResults, setFutureResults] = useState<FutureResults | null>(null);
+  const [final, setFinal] = useState<Fase>(Fase.End)
   const [score, setScore] = useState<number>(0);
   const [progress, setProgress] = useState(0); // Barra de progreso de buenas obras
   const [comenzarJuego, setComenzarJuego] = useState(false); // Estado para mostrar la introducción
-
-  // Reproducir música de fondo
+  // Reproducir música de fondo 
   useEffect(() => {
     const music = new Howl({
       src: [musica], // Ruta de la música de fondo
@@ -53,7 +58,8 @@ function Game() {
     if (level === Level.River) setLevel(Level.City); // Avanza del nivel 2 al 3
     if (level === Level.City) setLevel(Level.Global); // Avanza del nivel 3 al 4
     if (level === Level.Global) setLevel(Level.Mars); // Avanza del nivel 4 al 5 (Marte)
-    if (level === Level.Mars) setLevel(Level.Town);
+    if (level === Level.Mars) {onFinish();
+    }
   };
 
   // 👉 Scroll al top cuando entras al nivel 2, 3, 4 o 5
@@ -62,7 +68,7 @@ function Game() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [level]);
-
+  
   const empezarJuego = () => {
     setComenzarJuego(true); // Inicia el juego después de la introducción
   };

@@ -74,8 +74,14 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
   };
 
   return (
-    <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
-      <img src={mapaMarte} alt="Mapa de Marte" style={{ width: '100%' }} />
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+      {/* Imagen del mapa de Marte con borde neón */}
+      <img src={mapaMarte} alt="Mapa de Marte" style={{ 
+        width: '100%', 
+        border: '2px solid transparent', 
+        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3', // Borde neón en la imagen
+        animation: 'neon-flicker 1.5s infinite alternate'
+      }} />
 
       {/* Elementos interactivos */}
       <img
@@ -89,9 +95,9 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
         }}
         style={{
           position: 'absolute',
-          top: '150px',
-          left: '100px',
-          width: '80px',
+          top: '150px',  // Posición ajustada para el asentamiento
+          left: '100px', // Ajuste de la posición
+          width: '80px', // Tamaño ajustado
           cursor: asentamientoDecision ? 'default' : 'pointer',
           opacity: asentamientoDecision ? 0.4 : 1
         }}
@@ -107,9 +113,9 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
         }}
         style={{
           position: 'absolute',
-          top: '250px',
-          right: '120px',
-          width: '80px',
+          top: '250px',  // Posición ajustada para los recursos
+          right: '120px', // Ajuste de la posición
+          width: '80px', // Tamaño ajustado
           cursor: recursosDecision ? 'default' : 'pointer',
           opacity: recursosDecision ? 0.4 : 1
         }}
@@ -125,9 +131,9 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
         }}
         style={{
           position: 'absolute',
-          bottom: '80px',
-          left: '300px',
-          width: '90px',
+          bottom: '80px',  // Posición ajustada para relaciones internacionales
+          left: '300px',   // Ajuste de la posición
+          width: '90px',   // Tamaño ajustado
           cursor: relacionesDecision ? 'default' : 'pointer',
           opacity: relacionesDecision ? 0.4 : 1
         }}
@@ -150,25 +156,31 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
         />
       )}
 
-      {/* Barra de progreso */}
-      <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
-        <div style={{ width: `${progress}%`, height: '100%', backgroundColor: '#4CAF50' }}></div>
-      </div>
-
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button
-          onClick={() => {
-            evaluarFuturo();
-            playSound(futureSound); // Sonido al ver el futuro
-          }}
-          style={{ marginTop: '20px' }}
-        >
+        <button onClick={() => {
+          evaluarFuturo();
+          playSound(futureSound); // Sonido al ver el futuro
+        }} style={boton}>
           Ver Futuro
         </button>
       )}
     </div>
   );
+};
+
+const boton: React.CSSProperties = {
+  marginTop: '1rem',
+  padding: '12px 28px',
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+  borderRadius: '10px',
+  background: 'linear-gradient(145deg, #00ffcc, #00b3b3)',
+  color: '#000',
+  border: '2px solid #00ffff',
+  boxShadow: '0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 6px rgba(0, 255, 255, 0.6)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
 };
 
 export default MapaMarte;
