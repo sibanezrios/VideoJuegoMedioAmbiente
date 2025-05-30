@@ -1,63 +1,48 @@
 import React, { useState } from 'react';
+import { Howl } from 'howler';
 import DecisionPopup from '../../DecisionPopup'; // Componente reutilizable de popup
-import bueno2 from './assets/futuro_bueno_rio.png';  // Imagen para el futuro bueno (Nivel 2)
-import medio2 from './assets/futuro_medio_rio.png';  // Imagen para el futuro medio (Nivel 2)
-import malo2 from './assets/futuro_malo_rio.png';  // Imagen para el futuro malo (Nivel 2)
 import rio from './assets/mapa_rio.png';  // Mapa del río
 import bosqueIcono from './assets/bosque.png';  // Icono del bosque
 import plantaIcono from './assets/planta.png';  // Icono de la planta industrial
 import muelleIcono from './assets/rio.png';  
+import { buildResults } from './results';
+import { preguntasYOpciones } from './questions';
 import { Future, FutureResults } from '../../constants';
+import clickSound from './assets/sounds/select_option.mp3';
+import selectOptionSound from './assets/sounds/select_option.mp3';
+import confirmSound from './assets/sounds/confirm_sound.mp3';
+import futureSound from './assets/sounds/future_sound.mp3';
 
 interface MapaRioProps {
   currentScore: number;
-  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
+  setFutureResults: (results: FutureResults) => void;
 }
 
-function buildResults(type: Future, score: number): FutureResults {
-  switch(type) {
-    case Future.VeryGood:
-      return {
-        message: '¡El río está limpio y la comunidad está más saludable! 🎉',
-        image: bueno2,
-        type,
-        score,
-        title : 'El futuro del rio alcanzó su versión ideal'
-      }
-    case Future.Medium:
-      return {
-        message: 'El río ha mejorado, pero aún queda trabajo por hacer. 🌱',
-        image: medio2,
-        type,
-        score,
-        title : 'El futuro del rio es prometedor, pero...'
-      }
-    default:
-      return {
-        message: 'El río está muy contaminado y la comunidad está sufriendo. 💔',
-        image: malo2,
-        type,
-        score,
-        title : 'El futuro del rio ha alcanzado el declive máximo'
-      }
-  }
-}
+// Función para mezclar las opciones de forma aleatoria
 function shuffleOptions(options: { texto: string; valor: string }[]): { texto: string; valor: string }[] {
-  const shuffled = [...options];
+  const shuffled = [...options]; // Hacemos una copia del array
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    const j = Math.floor(Math.random() * (i + 1)); // Generamos un índice aleatorio
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Intercambiamos los elementos
   }
   return shuffled;
 }
 
+// Función central para reproducir sonidos
+const playSound = (soundFile: string) => {
+  const sound = new Howl({
+    src: [soundFile],
+    volume: 0.5, // Controlar volumen
+  });
+  sound.play(); // Reproducir sonido
+};
 
-const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
+function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
   // Estados para las decisiones
   const [ríoDecision, setRíoDecision] = useState<string | null>(null);
   const [bosqueDecision, setBosqueDecision] = useState<string | null>(null);
   const [plantaDecision, setPlantaDecision] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0); // Barra de progreso
 
   // Estado para el popup (interactividad)
   const [popup, setPopup] = useState<null | 'rio' | 'bosque' | 'planta'>(null); // Cambié "río" a "rio"
@@ -65,7 +50,7 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
   const todasTomadas = ríoDecision && bosqueDecision && plantaDecision;
 
   // Evaluamos el futuro basado en el puntaje
-  function evaluarFuturo() {
+  function evaluateFuture() {
     let score = 0;
 
     // Evaluación del río
@@ -73,38 +58,15 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
     if (plantaDecision === "invertir") score++;
     if (bosqueDecision === "conservar") score++;
 
-    setProgress(prevProgress => Math.min(prevProgress + 10, 100));
+    setProgress(prevProgress => Math.min(prevProgress + 10, 100)); // Actualizamos la barra de progreso
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
-    const results = buildResults(future,score);
+    const results = buildResults(future, score);
     setFutureResults(results);
-  }
 
-  // Opciones para las decisiones del jugador
-  const preguntasYOpciones = {
-    rio: {  // Cambié "río" a "rio"
-      pregunta: "¿Cómo vas a tratar la contaminación del río?",
-      opciones: [
-        { texto: "Limpiar el río completamente, gastando dinero aunque no estaba presupuestado, y destinarlo a la limpieza total del río", valor: "limpiar" },
-        { texto: "Construir una planta de tratamiento, pero con los ingresos de 2 semanas de trabajo de funcionarios gubernamentales de clase baja", valor: "invertir" },
-        { texto: "Dejar la contaminación tal como está, ignorando las peticiones de los ciudadanos acerca de las enfermedades causadas por el río, pero guardando el presupuesto.", valor: "dejar" }
-      ]
-    },
-    bosque: {
-      pregunta: "¿Vas a conservar el bosque cerca del río?",
-      opciones: [
-        { texto: "Conservar el bosque, frenando el crecimiento económico local", valor: "conservar" },
-        { texto: "Talar el bosque para agricultura generando también un crecimiento de la ganadería en la zona", valor: "taladrar" }
-      ]
-    },
-    planta: {
-      pregunta: "¿Cómo vas a manejar la planta industrial cerca del río?",
-      opciones: [
-        { texto: "Instalar filtros avanzados para reducir los desechos al mínimo, y aprovechar el agua del río para enfriar las máquinas sin desperdiciar desechos.", valor: "invertir" },
-        { texto: "Tratar las aguas residuales antes de verterlas al río, solo cuando la producción lo permita para no afectar la eficiencia de la fábrica", valor: "cerrar" }
-      ]
-    }
-  };
+    // Reproducir el sonido de confirmación
+    playSound(confirmSound);
+  }
 
   return (
     <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
@@ -114,7 +76,12 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
       <img
         src={bosqueIcono}
         alt="Bosque"
-        onClick={() => !bosqueDecision && setPopup("bosque")}
+        onClick={() => {
+          if (!bosqueDecision) {
+            setPopup('bosque');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '200px',
@@ -127,7 +94,12 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
       <img
         src={plantaIcono}
         alt="Planta industrial"
-        onClick={() => !plantaDecision && setPopup("planta")}
+        onClick={() => {
+          if (!plantaDecision) {
+            setPopup('planta');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '150px',
@@ -140,7 +112,12 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
       <img
         src={muelleIcono}
         alt="Muelle"
-        onClick={() => !ríoDecision && setPopup("rio")} // Cambié "río" a "rio"
+        onClick={() => {
+          if (!ríoDecision) {
+            setPopup('rio'); 
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           bottom: '80px',
@@ -153,19 +130,20 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
 
       {/* Mostrar popup de decisiones */}
       {popup && (
-  <DecisionPopup
-    tipo={popup === 'rio' ? 'rio' : popup === 'bosque' ? 'bosque' : 'planta'}  // Aquí se pasa el tipo adecuado según el popup
-    pregunta={preguntasYOpciones[popup].pregunta}
-    opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Usar la función shuffle para desordenar las opciones
-    onClose={() => setPopup(null)}
-    onSelect={(decision: string) => {
-      if (popup === "rio") setRíoDecision(decision);
-      if (popup === "bosque") setBosqueDecision(decision);
-      if (popup === "planta") setPlantaDecision(decision);
-      setPopup(null);
-    }}
-  />
-)}
+        <DecisionPopup
+          tipo={popup === 'rio' ? 'rio' : popup === 'bosque' ? 'bosque' : 'planta'}
+          pregunta={preguntasYOpciones[popup].pregunta}
+          opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Revolvemos las opciones
+          onClose={() => setPopup(null)}
+          onSelect={(decision: string) => {
+            if (popup === 'rio') setRíoDecision(decision);
+            if (popup === 'bosque') setBosqueDecision(decision);
+            if (popup === 'planta') setPlantaDecision(decision);
+            playSound(selectOptionSound); // Sonido al seleccionar opción
+            setPopup(null);
+          }}
+        />
+      )}
 
       {/* Barra de progreso */}
       <div style={{ width: '100%', height: '10px', backgroundColor: '#ccc' }}>
@@ -174,15 +152,20 @@ const MapaRio: React.FC<MapaRioProps> = ({ setFutureResults }) => {
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={boton}>
+        <button
+          onClick={() => {
+            evaluateFuture();
+            playSound(futureSound); // Sonido al ver el futuro
+          }}
+          style={boton}
+        >
           Ver Futuro
         </button>
       )}
     </div>
   );
-};
+}
 
-// Estilo del botón
 const boton: React.CSSProperties = {
   marginTop: '1rem',
   padding: '12px 28px',

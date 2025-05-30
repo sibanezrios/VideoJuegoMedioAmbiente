@@ -1,51 +1,35 @@
 import React, { useState } from 'react';
-import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup
+import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup 
 import mundoFondo from './assets/mundo_mapa.png';
 import clima from './assets/clima.png';
 import pandemia from './assets/pandemia.png';
-import muyBueno4 from './assets/Futuro-bueno-mundo.png';
-import medio4 from './assets/Futuro-medio-mundo.png';
-import malo4 from './assets/Futuro-malo-mundo.png';
 import personas from './assets/personas.png';
 import salud from './assets/salud.png';
 import renovable from './assets/renovable.png';
 import { Future, FutureResults } from '../../constants';
+import { buildResults } from './results';
+import { preguntasYOpciones } from './questions';
+import clickSound from './assets/sounds/select_option.mp3';
+import selectOptionSound from './assets/sounds/select_option.mp3';
+import confirmSound from './assets/sounds/confirm_sound.mp3';
+import futureSound from './assets/sounds/future_sound.mp3';
+import { Howl } from 'howler';
 
 interface MapaCrisisGlobalProps {
+  setFutureResults: (results: FutureResults) => void;
   currentScore: number;
-  setFutureResults: (results: FutureResults) => void;  // Función para actualizar el futuro
 }
 
-function buildResults(type: Future, score: number): FutureResults {
-  switch (type) {
-    case Future.VeryGood:
-      return {
-        message: `¡Felicidades! El mundo ha logrado equilibrar sus problemas globales. 🌍🎉 Puntaje: ${score}`,
-        image: muyBueno4,
-        type,
-        score,
-        title: 'Futuro del mundo'
-      }
-    case Future.Medium:
-      return {
-        message: `El mundo ha mejorado, pero aún hay desafíos por resolver. 🌱 Puntaje: ${score}`,
-        image: medio4,
-        type,
-        score,
-        title: 'Futuro del mundo'
-      }
-    default:
-      return {
-        message: `La crisis global sigue empeorando, con consecuencias negativas a largo plazo. 💔 Puntaje: ${score}`,
-        image: malo4,
-        type,
-        score,
-        title: 'Futuro del mundo'
-      }
-  }
-}
+// Función para reproducir los sonidos
+const playSound = (soundFile: string) => {
+  const sound = new Howl({
+    src: [soundFile],
+    volume: 0.5, // Controlar volumen
+  });
+  sound.play(); // Reproducir sonido
+};
 
-const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFutureResults }) => {
+function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalProps){
   const [cambioClimaticoDecision, setCambioClimaticoDecision] = useState<string | null>(null);
   const [pandemiaDecision, setPandemiaDecision] = useState<string | null>(null);
   const [recursosDecision, setRecursosDecision] = useState<string | null>(null);
@@ -76,35 +60,8 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
     setFutureResults(results);
+    playSound(confirmSound); // Sonido al ver el futuro
   }
-
-  // Opciones para las decisiones del jugador
-  const preguntasYOpciones = {
-    cambioClimatico: {
-      pregunta: "¿Cómo abordas el cambio climático global?",
-      opciones: [
-        { texto: "Imponer sanciones a los países más contaminantes", valor: "sanciones" },
-        { texto: "Promover un acuerdo global de reducción de emisiones", valor: "acuerdo" },
-        { texto: "Dejar que cada país gestione sus políticas de forma independiente", valor: "independiente" }
-      ]
-    },
-    pandemia: {
-      pregunta: "¿Cómo coordinarás la respuesta internacional a la pandemia?",
-      opciones: [
-        { texto: "Cerrar fronteras y aislar países ricos", valor: "restricciones" },
-        { texto: "Distribuir vacunas globalmente", valor: "cooperacion" },
-        { texto: "Dejar que cada nación gestione de forma independiente", valor: "independiente" }
-      ]
-    },
-    recursos: {
-      pregunta: "¿Cómo gestionarás la escasez de recursos naturales?",
-      opciones: [
-        { texto: "Nacionalizar recursos y priorizar intereses nacionales", valor: "nacionalizar" },
-        { texto: "Crear un sistema de distribución global justa", valor: "distribucion" },
-        { texto: "Dejar que el mercado regule los recursos", valor: "mercado" }
-      ]
-    }
-  };
 
   return (
     <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
@@ -114,7 +71,12 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={clima}
         alt="Cambio climático"
-        onClick={() => !cambioClimaticoDecision && setPopup("cambioClimatico")}
+        onClick={() => {
+          if (!cambioClimaticoDecision) {
+            setPopup('cambioClimatico');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '100px',
@@ -127,7 +89,12 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={pandemia}
         alt="Pandemia"
-        onClick={() => !pandemiaDecision && setPopup("pandemia")}
+        onClick={() => {
+          if (!pandemiaDecision) {
+            setPopup('pandemia');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '150px',
@@ -140,7 +107,12 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={renovable}
         alt="Recursos naturales"
-        onClick={() => !recursosDecision && setPopup("recursos")}
+        onClick={() => {
+          if (!recursosDecision) {
+            setPopup('recursos');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           bottom: '80px',
@@ -162,6 +134,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
             if (popup === 'cambioClimatico') setCambioClimaticoDecision(decision);
             if (popup === 'pandemia') setPandemiaDecision(decision);
             if (popup === 'recursos') setRecursosDecision(decision);
+            playSound(selectOptionSound); // Sonido al seleccionar opción
             setPopup(null);
           }}
         />
@@ -169,7 +142,13 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={{ marginTop: '20px' }}>
+        <button
+          onClick={() => {
+            evaluarFuturo();
+            playSound(futureSound); // Sonido al ver el futuro
+          }}
+          style={{ marginTop: '20px' }}
+        >
           Ver Futuro
         </button>
       )}

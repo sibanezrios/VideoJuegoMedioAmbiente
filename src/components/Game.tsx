@@ -8,6 +8,8 @@ import MapaCrisisGlobal from "../maps/GlobalCrisis/MapaCrisisGlobal";
 import MapaMarte from "../maps/Mars/MapaMarte";
 import fondoOscuro from '../assets/fondoOscuro.jpg';
 import fondoClaro from '../assets/fondoClaro.jpg';
+import { Howl } from "howler"; // Importar howler para la música
+import musica from '../assets/sounds/background_music.mp3';
 
 function Game() {
   const [level, setLevel] = useState<Level>(Level.Town);
@@ -15,6 +17,21 @@ function Game() {
   const [score, setScore] = useState<number>(0);
   const [progress, setProgress] = useState(0); // Barra de progreso de buenas obras
   
+  // Reproducir música de fondo
+  useEffect(() => {
+    const music = new Howl({
+      src: [musica], // Ruta de la música de fondo
+      loop: true, // Reproduce en loop
+      volume: 0.3, // Controla el volumen
+    });
+
+    music.play(); // Reproducir música cuando el componente se monte
+
+    return () => {
+      music.stop(); // Detener la música cuando el componente se desmonte
+    };
+  }, []);
+
   // Actualizamos la barra de buenas obras cada vez que el score cambia
   useEffect(() => {
     setProgress((prevProgress) => Math.min(prevProgress + score * 10, 100)); // La barra se suma con cada decisión
@@ -91,7 +108,6 @@ function Game() {
           </>
         )}
       </div>
-
 
       {/* Barra de Progreso de Buenas Obras */}
       <div style={barraContenedor}>

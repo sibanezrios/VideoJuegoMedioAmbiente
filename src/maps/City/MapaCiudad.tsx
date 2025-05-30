@@ -1,48 +1,24 @@
 import React, { useState } from 'react';
-import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup
-import muyBueno3 from './assets/futuro_bueno_ciudad.png';  
-import medio3 from './assets/futuro_medio_ciudad.png';  
-import malo3 from './assets/futuro_malo_ciudad.png';  
+import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup 
 import ciudadFondo from './assets/ciudad_mapa.png'; 
 import plantaNuclearIcono from './assets/planta_energetica.png'; 
 import zonaResidencialIcono from './assets/expansion.png'; 
 import carreteraIcono from './assets/transporte.png'; 
 import { Future, FutureResults } from '../../constants';
+import { buildResults } from './results';
+import { preguntasYOpciones } from './questions';
+import clickSound from './assets/sounds/select_option.mp3';
+import selectOptionSound from './assets/sounds/select_option.mp3';
+import confirmSound from './assets/sounds/confirm_sound.mp3';
+import futureSound from './assets/sounds/future_sound.mp3';
+import { Howl } from 'howler';
 
 interface MapaCiudadProps {
   currentScore: number;
-  setFutureResults: (results: FutureResults) => void; 
+  setFutureResults: (results: FutureResults) => void;
 }
 
-function buildResults(type: Future, score: number): FutureResults {
-  switch(type) {
-    case Future.VeryGood:
-      return {
-        message: `¡Felicidades! La ciudad ha crecido de manera sostenible. 🌳🎉 Puntaje: ${score}`,
-        image: muyBueno3,
-        type,
-        score,
-        title : 'EL futuro que escogiste ha mantenido viva la ciudad a lo largo de los años'
-      }
-    case Future.Medium:
-      return {
-        message: `La ciudad ha mejorado, pero aún quedan algunos problemas por resolver. 🌱 Puntaje: ${score}`,
-        image: medio3,
-        type,
-        score,
-        title : 'El futuro de la ciudad se mantiene estable, pero no por mucho tiempo'
-      }
-    default:
-      return {
-        message: `La ciudad ha empeorado, con consecuencias negativas a largo plazo. 💔 Puntaje: ${score}`,
-        image: malo3,
-        type,
-        score,
-        title : 'La ciudad dejó de lado el concepto de futuro y se tiene poca probabilidad de mejora'
-      }
-  }
-}
-
+// Función para mezclar las opciones de forma aleatoria
 function shuffleOptions(options: { texto: string; valor: string }[]): { texto: string; valor: string }[] {
   const shuffled = [...options];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -52,7 +28,16 @@ function shuffleOptions(options: { texto: string; valor: string }[]): { texto: s
   return shuffled;
 }
 
-const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
+// Función central para reproducir sonidos
+const playSound = (soundFile: string) => {
+  const sound = new Howl({
+    src: [soundFile],
+    volume: 0.5, // Controlar volumen
+  });
+  sound.play(); // Reproducir sonido
+};
+
+function MapaCiudad({ currentScore, setFutureResults }: MapaCiudadProps){
   // Estados para las decisiones
   const [plantaNuclearDecision, setPlantaNuclearDecision] = useState<string | null>(null);
   const [residencialDecision, setResidencialDecision] = useState<string | null>(null);
@@ -80,43 +65,15 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
     if (carreteraDecision === 'invertir') score++;
     if (carreteraDecision === 'expandir') score--;
 
-    setProgress(prevProgress => Math.min(prevProgress + 10, 100));
+    setProgress(prevProgress => Math.min(prevProgress + 10, 100)); // Actualizamos la barra de progreso
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
-    const results = buildResults(future,score);
+    const results = buildResults(future, score);
     setFutureResults(results);
+    
+    // Reproducir el sonido de confirmación al ver el futuro
+    playSound(confirmSound);
   }
-
-  // Opciones para las decisiones del jugador
-  const preguntasYOpciones = {
-    plantaNuclear: {
-      pregunta: "¿Cómo vas a manejar la planta energética nuclear?",
-      opciones: [
-        { texto: "Invertir en energías renovables (solar y eólica) a largo plazo", valor: "invertir" },
-        { texto: "Cerrar la planta nuclear y apostar por energía 100% limpia, pero perder producción inmediata", valor: "cerrar" },
-        { texto: "Modernizar la planta nuclear con tecnologías más seguras, pero seguir dependiendo de energía nuclear", valor: "modernizar" },
-        { texto: "Expandir la planta nuclear para aumentar la producción, ignorando los efectos ambientales a largo plazo", valor: "expandir" }
-      ]
-    },
-    residencial: {
-      pregunta: "La ciudad necesita expandirse, pero las áreas verdes están en riesgo. ¿Cómo manejarás el crecimiento?",
-      opciones: [
-        { texto: "Expandir hacia zonas ya urbanizadas, conservando las áreas verdes", valor: "expandir" },
-        { texto: "Expandir hacia áreas verdes, pero asegurando que la mitad del espacio se destine a parques y jardines", valor: "expandir-verde" },
-        { texto: "Conservar las áreas verdes y aumentar la densidad de edificios en las zonas urbanizadas", valor: "conservar" },
-        { texto: "Expandir sin restricciones, priorizando el crecimiento económico rápido", valor: "expandir-liberado" }
-      ]
-    },
-    carretera: {
-      pregunta: "El tráfico es un problema creciente, pero las soluciones implican compromisos. ¿Qué harás con el transporte urbano?",
-      opciones: [
-        { texto: "Invertir en un sistema de transporte público ecológico, eléctrico y eficiente", valor: "invertir" },
-        { texto: "Expandir las carreteras y promover el uso de vehículos eléctricos para reducir la contaminación", valor: "expandir-sostenible" },
-        { texto: "Ampliar las carreteras para facilitar el tránsito de vehículos privados, pero sin tener en cuenta la sostenibilidad a largo plazo", valor: "expandir-privado" },
-        { texto: "Desarrollar un sistema mixto: mejorar el transporte público y las infraestructuras para bicicletas y peatones", valor: "mixto" }
-      ]
-    }
-  };
 
   return (
     <div style={{ position: 'relative', width: '768px', margin: 'auto' }}>
@@ -126,7 +83,12 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
       <img
         src={zonaResidencialIcono}
         alt="Zona residencial"
-        onClick={() => !residencialDecision && setPopup("residencial")}
+        onClick={() => {
+          if (!residencialDecision) {
+            setPopup('residencial');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '200px',
@@ -139,7 +101,12 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
       <img
         src={plantaNuclearIcono}
         alt="Planta energética nuclear"
-        onClick={() => !plantaNuclearDecision && setPopup("plantaNuclear")}
+        onClick={() => {
+          if (!plantaNuclearDecision) {
+            setPopup('plantaNuclear');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           top: '150px',
@@ -152,7 +119,12 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
       <img
         src={carreteraIcono}
         alt="Carretera"
-        onClick={() => !carreteraDecision && setPopup("carretera")}
+        onClick={() => {
+          if (!carreteraDecision) {
+            setPopup('carretera');
+            playSound(clickSound); // Sonido de clic
+          }
+        }}
         style={{
           position: 'absolute',
           bottom: '80px',
@@ -174,6 +146,7 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
             if (popup === 'plantaNuclear') setPlantaNuclearDecision(decision);
             if (popup === 'residencial') setResidencialDecision(decision);
             if (popup === 'carretera') setCarreteraDecision(decision);
+            playSound(selectOptionSound); // Sonido al seleccionar opción
             setPopup(null);
           }}
         />
@@ -186,13 +159,16 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ setFutureResults }) => {
 
       {/* Botón para evaluar el futuro */}
       {todasTomadas && (
-        <button onClick={evaluarFuturo} style={boton}>
+        <button onClick={() => {
+          evaluarFuturo();
+          playSound(futureSound); // Sonido al ver el futuro
+        }} style={boton}>
           Ver Futuro
         </button>
       )}
     </div>
   );
-};
+}
 
 // Estilo del botón
 const boton: React.CSSProperties = {

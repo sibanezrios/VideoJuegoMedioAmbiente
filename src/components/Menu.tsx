@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import fondoOscuro from '../assets/fondoOscuro.jpg';
 import fondoClaro from '../assets/fondoClaro.jpg';
 import './Inicio.css';
+import { Howl } from 'howler';
+import clickSound from '../assets/sounds/confirm_sound.mp3';
 
 interface MenuProps {
   onStart: () => void;
@@ -11,6 +13,15 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const [mostrarControles, setMostrarControles] = useState(false);
   const [mostrarCreditos, setMostrarCreditos] = useState(false);
+
+  // Función para reproducir el sonido de clic
+  const playClickSound = () => {
+    const sound = new Howl({
+      src: [clickSound],
+      volume: 0.5,  // Ajusta el volumen según lo necesites
+    });
+    sound.play();
+  };
 
   return (
     <div className="inicio-dual-bg">
@@ -36,7 +47,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={onStart}
+              onClick={() => { onStart(); playClickSound(); }}  // Agrega el sonido al hacer clic
             >
               🎮 Jugar
             </motion.button>
@@ -44,7 +55,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setMostrarControles(true)}
+              onClick={() => { setMostrarControles(true); playClickSound(); }}  // Agrega el sonido al hacer clic
             >
               📘 Controles
             </motion.button>
@@ -52,7 +63,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setMostrarCreditos(true)}
+              onClick={() => { setMostrarCreditos(true); playClickSound(); }}  // Agrega el sonido al hacer clic
             >
               📜 Créditos
             </motion.button>
@@ -67,7 +78,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               <li>❌ Mala acción = resta puntos</li>
               <li>🚀 Ver el futuro = muestra el resultado</li>
             </ul>
-            <button className="start-button neon-button" onClick={() => setMostrarControles(false)}>🔙 Volver</button>
+            <button className="start-button neon-button" onClick={() => { setMostrarControles(false); playClickSound(); }}>🔙 Volver</button>
           </>
         )}
 
@@ -76,7 +87,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
             <h2 className="central-texto">📜 Créditos</h2>
             <p style={{ color: 'white' }}>Juego desarrollado por tu equipo ambiental 💚</p>
             <p style={{ color: 'white' }}>Ilustraciones creadas con IA</p>
-            <button className="start-button neon-button" onClick={() => setMostrarCreditos(false)}>🔙 Volver</button>
+            <button className="start-button neon-button" onClick={() => { setMostrarCreditos(false); playClickSound(); }}>🔙 Volver</button>
           </>
         )}
       </motion.div>
@@ -85,39 +96,3 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
 };
 
 export default Menu;
-
-
-
-const titulo: React.CSSProperties = {
-  fontSize: '2rem',
-  marginBottom: '0.5rem',
-  textShadow: '0 0 10px #0ff',
-};
-
-const subtitulo: React.CSSProperties = {
-  fontSize: '1rem',
-  marginBottom: '1.5rem',
-};
-
-const botonNeon: React.CSSProperties = {
-  display: 'block',
-  width: '100%',
-  margin: '0.5rem auto',
-  padding: '0.8rem 1rem',
-  fontSize: '1rem',
-  color: '#0ff',
-  background: 'transparent',
-  border: '2px solid #0ff',
-  borderRadius: '10px',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
-  boxShadow: '0 0 8px #0ff',
-};
-
-const lista: React.CSSProperties = {
-  listStyle: 'none',
-  padding: 0,
-  margin: '1rem 0',
-  color: '#fff',
-};
-
