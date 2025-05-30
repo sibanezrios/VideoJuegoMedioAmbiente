@@ -10,13 +10,15 @@ import fondoOscuro from '../assets/fondoOscuro.jpg';
 import fondoClaro from '../assets/fondoClaro.jpg';
 import { Howl } from "howler"; // Importar howler para la música
 import musica from '../assets/sounds/background_music.mp3';
+import Introduccion from './Context'; // Importamos el componente de introducción
 
 function Game() {
-  const [level, setLevel] = useState<Level>(Level.Town);
+  const [level, setLevel] = useState<Level>(Level.Town); // Nivel inicial
   const [futureResults, setFutureResults] = useState<FutureResults | null>(null);
   const [score, setScore] = useState<number>(0);
   const [progress, setProgress] = useState(0); // Barra de progreso de buenas obras
-  
+  const [comenzarJuego, setComenzarJuego] = useState(false); // Estado para mostrar la introducción
+
   // Reproducir música de fondo
   useEffect(() => {
     const music = new Howl({
@@ -37,11 +39,16 @@ function Game() {
     setProgress((prevProgress) => Math.min(prevProgress + score * 10, 100)); // La barra se suma con cada decisión
   }, [score]);
 
+  // Avanzar al siguiente nivel
   const levelUp = () => {
-    if(futureResults) {
+    if (futureResults) {
       setScore(score + futureResults?.score);
     }
     setFutureResults(null);
+
+    // Al avanzar de nivel, reiniciar el estado de empezar juego para mostrar la introducción
+    setComenzarJuego(false);
+
     if (level === Level.Town) setLevel(Level.River); // Avanza del nivel 1 al 2
     if (level === Level.River) setLevel(Level.City); // Avanza del nivel 2 al 3
     if (level === Level.City) setLevel(Level.Global); // Avanza del nivel 3 al 4
@@ -55,55 +62,69 @@ function Game() {
     }
   }, [level]);
 
+  const empezarJuego = () => {
+    setComenzarJuego(true); // Inicia el juego después de la introducción
+  };
+
   return (
     <div className="nivel-con-fondo">
       <img src={fondoOscuro} alt="Fondo oscuro" className="imagen-incendio" />
       <img src={fondoClaro} alt="Fondo claro" className="imagen-bosque" />
-  
+
       <div className="contenido-nivel">
-        {level === Level.Town ? (
-          <>
-            <h1>🌱 Juego Ambiental - Nivel 1: El Barrio</h1>
-            {futureResults ? (
-              <FutureScene results={futureResults!} onContinue={levelUp} />
-            ) : (
-              <MapaBarrio setFutureResults={setFutureResults} currentScore={score} />
-            )}
-          </>
-        ) : level === Level.River ? (
-          <>
-            <h1>🌊 Juego Ambiental - Nivel 2: El Río</h1>
-            {futureResults ? (
-              <FutureScene results={futureResults!} onContinue={levelUp} />
-            ) : (
-              <MapaRio setFutureResults={setFutureResults} currentScore={score} />
-            )}
-          </>
-        ) : level === Level.City ? (
-          <>
-            <h1>🌆 Juego Ambiental - Nivel 3: La Ciudad</h1>
-            {futureResults ? (
-              <FutureScene results={futureResults!} onContinue={levelUp} />
-            ) : (
-              <MapaCiudad setFutureResults={setFutureResults} currentScore={score} />
-            )}
-          </>
-        ) : level === Level.Global ? (
-          <>
-            <h1>🌍 Juego Ambiental - Nivel 4: Crisis Global y Colaboración Internacional</h1>
-            {futureResults ? (
-              <FutureScene results={futureResults!} onContinue={levelUp} />
-            ) : (
-              <MapaCrisisGlobal setFutureResults={setFutureResults} currentScore={score} />
-            )}
-          </>
+        {!comenzarJuego ? (
+          <Introduccion nivel={level} onStart={empezarJuego} />
         ) : (
           <>
-            <h1>🚀 Juego Ambiental - Nivel 5: El Último Umbral: Evitar la Autodestrucción Global</h1>
-            {futureResults ? (
-              <FutureScene results={futureResults!} onContinue={levelUp} />
-            ) : (
-              <MapaMarte setFutureResults={setFutureResults} currentScore={score} />
+            {level === Level.Town && (
+              <>
+                <h1>🌱 Juego Ambiental - Nivel 1: El Barrio</h1>
+                {futureResults ? (
+                  <FutureScene results={futureResults!} onContinue={levelUp} />
+                ) : (
+                  <MapaBarrio setFutureResults={setFutureResults} currentScore={score} />
+                )}
+              </>
+            )}
+            {level === Level.River && (
+              <>
+                <h1>🌊 Juego Ambiental - Nivel 2: El Río</h1>
+                {futureResults ? (
+                  <FutureScene results={futureResults!} onContinue={levelUp} />
+                ) : (
+                  <MapaRio setFutureResults={setFutureResults} currentScore={score} />
+                )}
+              </>
+            )}
+            {level === Level.City && (
+              <>
+                <h1>🌆 Juego Ambiental - Nivel 3: La Ciudad</h1>
+                {futureResults ? (
+                  <FutureScene results={futureResults!} onContinue={levelUp} />
+                ) : (
+                  <MapaCiudad setFutureResults={setFutureResults} currentScore={score} />
+                )}
+              </>
+            )}
+            {level === Level.Global && (
+              <>
+                <h1>🌍 Juego Ambiental - Nivel 4: Crisis Global y Colaboración Internacional</h1>
+                {futureResults ? (
+                  <FutureScene results={futureResults!} onContinue={levelUp} />
+                ) : (
+                  <MapaCrisisGlobal setFutureResults={setFutureResults} currentScore={score} />
+                )}
+              </>
+            )}
+            {level === Level.Mars && (
+              <>
+                <h1>🚀 Juego Ambiental - Nivel 5: El Último Umbral: Evitar la Autodestrucción Global</h1>
+                {futureResults ? (
+                  <FutureScene results={futureResults!} onContinue={levelUp} />
+                ) : (
+                  <MapaMarte setFutureResults={setFutureResults} currentScore={score} />
+                )}
+              </>
             )}
           </>
         )}
