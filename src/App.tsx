@@ -1,36 +1,28 @@
 import React, { useState } from 'react';
 import Menu from './components/Menu';
 import Inicio from './components/inicio';
-import './Nivel.css'; // asegúrate de que esté correctamente enlazado
+import './Nivel.css';
 import { Fase } from './constants';
 import Game from './components/Game';
 import FinalScene from './components/FinalScene';
+import { TTSProvider } from './assets/hooks/TTSContext'; 
 
 function App() {
   const [fase, setFase] = useState<Fase>(Fase.Start);
 
-  // === Fases ===
-  if (fase === Fase.Start) {
-    return <Inicio onStart={() => setFase(Fase.Menu)} />;
-  }
-
-  if (fase === Fase.Menu) {
-    return <Menu onStart={() => setFase(Fase.Game)} />;
-  }
-
-  // === Fase juego ===
-  if (fase === Fase.Game) {
-    return <Game onFinish={() => setFase(Fase.End)}/>;
-  }
-
-  if (fase === Fase.End) {
-    return <FinalScene onFinish={() => setFase(Fase.End)} progress={0}/>;
-  }
-
-  if (fase === Fase.End) {
-    return <FinalScene onFinish={() => setFase(Fase.Start)} progress={0}/>;
-  }
-  return null;
+  return (
+    <TTSProvider>
+      {fase === Fase.Start && <Inicio onStart={() => setFase(Fase.Menu)} />}
+      {fase === Fase.Menu && <Menu onStart={() => setFase(Fase.Game)} />}
+      {fase === Fase.Game && <Game onFinish={() => setFase(Fase.End)} />}
+      {fase === Fase.End && (
+        <FinalScene
+          onFinish={() => setFase(Fase.Start)}
+          progress={0}
+        />
+      )}
+    </TTSProvider>
+  );
 }
 
 export default App;

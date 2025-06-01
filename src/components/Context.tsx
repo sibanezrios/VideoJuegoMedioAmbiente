@@ -1,6 +1,7 @@
 import React from 'react';
 import { Level } from '../constants';
 import { motion } from 'framer-motion';
+import { useTTS } from '../assets/hooks/useTTS';
 
 
 
@@ -16,7 +17,7 @@ const Introduccion: React.FC<IntroduccionProps> = ({ nivel, onStart }) => {
         return {
           titulo: "Bienvenido a Bajarrio",
           descripcion:
-            "Te has convertido en el alcalde de Bajarrio, un barrio lleno de potencial. Sin embargo, los desafíos son grandes: calles rotas, falta de agua potable y crecientes desigualdades. Cada decisión que tomes afectará el futuro de la comunidad. ¿Qué rumbo tomarás?",
+            "Te has convertido en el alcalde de Bajarrio, un barrio lleno de potencial. Sin embargo, los desafíos son grandes. Cada decisión que tomes afectará el futuro de la comunidad. ¿Qué rumbo tomarás?",
           objetivo:
             "Tu objetivo es mejorar la infraestructura del barrio, gestionar los recursos y tomar decisiones que beneficien a los ciudadanos.",
         };
@@ -62,7 +63,31 @@ const Introduccion: React.FC<IntroduccionProps> = ({ nivel, onStart }) => {
   };
 
   const { titulo, descripcion, objetivo } = obtenerContexto(nivel);
-
+  const textoParaLeer = [
+    titulo,
+    descripcion,
+    objetivo
+  ];
+  
+  const reproducirLectura = () => {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+  
+    let i = 0;
+    const speakNext = () => {
+      if (i >= textoParaLeer.length) return;
+      const utterance = new SpeechSynthesisUtterance(textoParaLeer[i]);
+      utterance.lang = 'es-ES';
+      utterance.onend = () => {
+        i++;
+        speakNext();
+      };
+      synth.speak(utterance);
+    };
+    speakNext();
+  };
+  useTTS(textoParaLeer);
+  
   return (
     <div className="contexto-container">
       <motion.div

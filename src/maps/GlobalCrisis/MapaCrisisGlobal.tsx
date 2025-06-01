@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import DecisionPopup from '../../DecisionPopup';  // Componente reutilizable de popup 
-import mundoFondo from './assets/mundo_mapa.png'; 
+import DecisionPopup from '../../DecisionPopup';
+import mundoFondo from './assets/mundo_mapa.png';
 import clima from './assets/clima.png';
 import pandemia from './assets/pandemia.png';
-import personas from './assets/personas.png';
-import salud from './assets/salud.png';
 import renovable from './assets/renovable.png';
 import { Future, FutureResults } from '../../constants';
 import { buildResults } from './results';
@@ -14,73 +12,81 @@ import selectOptionSound from './assets/sounds/select_option.mp3';
 import confirmSound from './assets/sounds/confirm_sound.mp3';
 import futureSound from './assets/sounds/future_sound.mp3';
 import { Howl } from 'howler';
+import { useTTSContext } from '../../assets/hooks/TTSContext'; 
+import { useTTS } from '../../assets/hooks/useTTS'; 
 
 interface MapaCrisisGlobalProps {
   setFutureResults: (results: FutureResults) => void;
   currentScore: number;
 }
 
-// Función para reproducir los sonidos
 const playSound = (soundFile: string) => {
   const sound = new Howl({
     src: [soundFile],
-    volume: 0.5, // Controlar volumen
+    volume: 0.5,
   });
-  sound.play(); // Reproducir sonido
+  sound.play();
 };
 
-function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalProps){
+function shuffleOptions(options: { texto: string; valor: string }[]) {
+  const shuffled = [...options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFutureResults }) => {
   const [cambioClimaticoDecision, setCambioClimaticoDecision] = useState<string | null>(null);
   const [pandemiaDecision, setPandemiaDecision] = useState<string | null>(null);
   const [recursosDecision, setRecursosDecision] = useState<string | null>(null);
-
   const [popup, setPopup] = useState<null | 'cambioClimatico' | 'pandemia' | 'recursos'>(null);
+  const [opcionesVisibles, setOpcionesVisibles] = useState<{ texto: string; valor: string }[] | null>(null);
 
   const todasTomadas = cambioClimaticoDecision && pandemiaDecision && recursosDecision;
 
-  // Evaluamos el futuro basado en las decisiones y el puntaje
+  const { ttsEnabled } = useTTSContext();
+  let textoParaLeer: string[] = [];
+
+  if (popup && opcionesVisibles && ttsEnabled) {
+    const pregunta = preguntasYOpciones[popup].pregunta;
+    const opciones = opcionesVisibles.map(o => o.texto);
+    textoParaLeer = [pregunta, ...opciones];
+  }
+
+  useTTS(textoParaLeer);
+
   function evaluarFuturo() {
     let score = 0;
-
-    // Evaluación del cambio climático
-    if (cambioClimaticoDecision === 'acuerdo') {
-      score++;
-    }
-
-    // Evaluación de la pandemia
-    if (pandemiaDecision === 'cooperacion') {
-      score++;
-    }
-
-    // Evaluación de los recursos naturales
-    if (recursosDecision === 'distribucion') {
-      score++;
-    }
+    if (cambioClimaticoDecision === 'acuerdo') score++;
+    if (pandemiaDecision === 'cooperacion') score++;
+    if (recursosDecision === 'distribucion') score++;
 
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
     setFutureResults(results);
-    playSound(confirmSound); // Sonido al ver el futuro
+    playSound(confirmSound);
   }
 
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
-      {/* Imagen del mapa del mundo con borde neón */}
-      <img src={mundoFondo} alt="Mapa del mundo" style={{ 
-        width: '100%', 
-        border: '2px solid transparent', 
-        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3', // Borde neón en la imagen
+      <img src={mundoFondo} alt="Mapa del mundo" style={{
+        width: '100%',
+        border: '2px solid transparent',
+        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3',
         animation: 'neon-flicker 1.5s infinite alternate'
       }} />
 
-      {/* Elementos interactivos sin borde neón */}
       <img
         src={clima}
         alt="Cambio climático"
         onClick={() => {
           if (!cambioClimaticoDecision) {
-            setPopup('cambioClimatico');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'cambioClimatico';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
@@ -92,13 +98,16 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
           opacity: cambioClimaticoDecision ? 0.4 : 1,
         }}
       />
+
       <img
         src={pandemia}
         alt="Pandemia"
         onClick={() => {
           if (!pandemiaDecision) {
-            setPopup('pandemia');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'pandemia';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
@@ -110,13 +119,16 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
           opacity: pandemiaDecision ? 0.4 : 1,
         }}
       />
+
       <img
         src={renovable}
         alt="Recursos naturales"
         onClick={() => {
           if (!recursosDecision) {
-            setPopup('recursos');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'recursos';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
@@ -129,28 +141,30 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
         }}
       />
 
-      {/* Mostrar popup de decisiones */}
-      {popup && (
+      {popup && opcionesVisibles && (
         <DecisionPopup
           tipo={popup}
           pregunta={preguntasYOpciones[popup].pregunta}
-          opciones={preguntasYOpciones[popup].opciones}
-          onClose={() => setPopup(null)}
+          opciones={opcionesVisibles}
+          onClose={() => {
+            setPopup(null);
+            setOpcionesVisibles(null);
+          }}
           onSelect={(decision: string) => {
             if (popup === 'cambioClimatico') setCambioClimaticoDecision(decision);
             if (popup === 'pandemia') setPandemiaDecision(decision);
             if (popup === 'recursos') setRecursosDecision(decision);
-            playSound(selectOptionSound); // Sonido al seleccionar opción
+            playSound(selectOptionSound);
             setPopup(null);
+            setOpcionesVisibles(null);
           }}
         />
       )}
 
-      {/* Botón para evaluar el futuro */}
       {todasTomadas && (
         <button onClick={() => {
           evaluarFuturo();
-          playSound(futureSound); // Sonido al ver el futuro
+          playSound(futureSound);
         }} style={boton}>
           Ver Futuro
         </button>
@@ -159,7 +173,6 @@ function MapaCrisisGlobal({ currentScore, setFutureResults }: MapaCrisisGlobalPr
   );
 };
 
-// Estilo del botón
 const boton: React.CSSProperties = {
   marginTop: '1rem',
   padding: '12px 28px',

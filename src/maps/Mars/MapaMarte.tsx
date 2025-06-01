@@ -12,50 +12,29 @@ import selectOptionSound from './assets/sounds/select_option.mp3';
 import confirmSound from './assets/sounds/confirm_sound.mp3';
 import futureSound from './assets/sounds/future_sound.mp3';
 import { Howl } from 'howler';
+import { useTTSContext } from '../../assets/hooks/TTSContext';
+import { useTTS } from '../../assets/hooks/useTTS';
+
 
 interface MapaMarteProps {
-  setFutureResults: (results: FutureResults) => void;
   currentScore: number;
+  setFutureResults: (results: FutureResults) => void;
 }
 
-const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore }) => {
+function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
   const [asentamientoDecision, setAsentamientoDecision] = useState<string | null>(null);
   const [recursosDecision, setRecursosDecision] = useState<string | null>(null);
   const [relacionesDecision, setRelacionesDecision] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);  // Barra de progreso
-
+  const [progress, setProgress] = useState(0);
   const [popup, setPopup] = useState<null | 'asentamiento' | 'recursos' | 'relaciones'>(null);
+  const [opcionesVisibles, setOpcionesVisibles] = useState<{ texto: string; valor: string }[] | null>(null);
 
   const todasTomadas = asentamientoDecision && recursosDecision && relacionesDecision;
 
-  // Evaluamos el futuro basado en las decisiones y el puntaje
-  function evaluarFuturo() {
-    let score = 0;
+  const { ttsEnabled } = useTTSContext();
 
-    // Evaluación del asentamiento
-    if (asentamientoDecision === 'modular') score++;
-    if (asentamientoDecision === 'autosuficiente') score--;
-
-    // Evaluación de los recursos
-    if (recursosDecision === 'sostenibilidad') score++;
-    if (recursosDecision === 'intensiva') score--;
-
-    // Evaluación de las relaciones
-    if (relacionesDecision === 'cooperacion') score++;
-    if (relacionesDecision === 'dependencia') score--;
-
-    setProgress(prevProgress => Math.min(prevProgress + 10, 100));  // Incrementar la barra de progreso
-
-    const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
-    const results = buildResults(future, score);
-    setFutureResults(results);
-
-    // Reproducir el sonido al ver el futuro
-    playSound(confirmSound); 
-  }
-
-  // Función shuffle para mezclar las opciones de manera aleatoria
-  function shuffleOptions(options: { texto: string; valor: string }[]): { texto: string; valor: string }[] {
+  // Mezcla las opciones una sola vez y guarda el resultado
+  function shuffleOptions(options: { texto: string; valor: string }[]) {
     const shuffled = [...options];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -64,103 +43,126 @@ const MapaMarte: React.FC<MapaMarteProps> = ({ setFutureResults, currentScore })
     return shuffled;
   }
 
-  // Función para reproducir los sonidos
   const playSound = (soundFile: string) => {
-    const sound = new Howl({
-      src: [soundFile],
-      volume: 0.5,
-    });
+    const sound = new Howl({ src: [soundFile], volume: 0.5 });
     sound.play();
   };
 
+  function evaluarFuturo() {
+    let score = 0;
+    if (asentamientoDecision === 'modular') score++;
+    if (asentamientoDecision === 'autosuficiente') score--;
+    if (recursosDecision === 'sostenibilidad') score++;
+    if (recursosDecision === 'intensiva') score--;
+    if (relacionesDecision === 'cooperacion') score++;
+    if (relacionesDecision === 'dependencia') score--;
+
+    setProgress(prev => Math.min(prev + 10, 100));
+    const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
+    const results = buildResults(future, score);
+    setFutureResults(results);
+    playSound(confirmSound);
+  }
+
+  // Genera el texto que se debe leer con el TTS
+  let textoParaLeer: string[] = [];
+  if (popup && opcionesVisibles && ttsEnabled) {
+    const pregunta = preguntasYOpciones[popup].pregunta;
+    const opciones = opcionesVisibles.map(o => o.texto);
+    textoParaLeer = [pregunta, ...opciones];
+  }
+  useTTS(textoParaLeer);
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
-      {/* Imagen del mapa de Marte con borde neón */}
-      <img src={mapaMarte} alt="Mapa de Marte" style={{ 
-        width: '100%', 
-        border: '2px solid transparent', 
-        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3', // Borde neón en la imagen
+      <img src={mapaMarte} alt="Mapa de Marte" style={{
+        width: '100%',
+        border: '2px solid transparent',
+        boxShadow: '0 0 15px #00ffff, 0 0 30px #00b3b3',
         animation: 'neon-flicker 1.5s infinite alternate'
       }} />
 
-      {/* Elementos interactivos */}
+      {/* Iconos interactivos */}
       <img
         src={asentamientoIcono}
         alt="Asentamiento"
         onClick={() => {
           if (!asentamientoDecision) {
-            setPopup('asentamiento');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'asentamiento';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
-          position: 'absolute',
-          top: '150px',  // Posición ajustada para el asentamiento
-          left: '100px', // Ajuste de la posición
-          width: '80px', // Tamaño ajustado
+          position: 'absolute', top: '150px', left: '100px', width: '80px',
           cursor: asentamientoDecision ? 'default' : 'pointer',
           opacity: asentamientoDecision ? 0.4 : 1
         }}
       />
+
       <img
         src={recursosIcono}
         alt="Recursos"
         onClick={() => {
           if (!recursosDecision) {
-            setPopup('recursos');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'recursos';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
-          position: 'absolute',
-          top: '250px',  // Posición ajustada para los recursos
-          right: '120px', // Ajuste de la posición
-          width: '80px', // Tamaño ajustado
+          position: 'absolute', top: '250px', right: '120px', width: '80px',
           cursor: recursosDecision ? 'default' : 'pointer',
           opacity: recursosDecision ? 0.4 : 1
         }}
       />
+
       <img
         src={relacionesIcono}
         alt="Relaciones Internacionales"
         onClick={() => {
           if (!relacionesDecision) {
-            setPopup('relaciones');
-            playSound(clickSound); // Sonido de clic
+            const tipo = 'relaciones';
+            setPopup(tipo);
+            setOpcionesVisibles(shuffleOptions(preguntasYOpciones[tipo].opciones));
+            playSound(clickSound);
           }
         }}
         style={{
-          position: 'absolute',
-          bottom: '80px',  // Posición ajustada para relaciones internacionales
-          left: '300px',   // Ajuste de la posición
-          width: '90px',   // Tamaño ajustado
+          position: 'absolute', bottom: '80px', left: '300px', width: '90px',
           cursor: relacionesDecision ? 'default' : 'pointer',
           opacity: relacionesDecision ? 0.4 : 1
         }}
       />
 
-      {/* Mostrar popup de decisiones */}
-      {popup && (
+      {/* Popup con opciones mezcladas */}
+      {popup && opcionesVisibles && (
         <DecisionPopup
           tipo={popup}
           pregunta={preguntasYOpciones[popup].pregunta}
-          opciones={shuffleOptions(preguntasYOpciones[popup].opciones)} // Opciones aleatorias
-          onClose={() => setPopup(null)}
+          opciones={opcionesVisibles}
+          onClose={() => {
+            setPopup(null);
+            setOpcionesVisibles(null);
+          }}
           onSelect={(decision: string) => {
             if (popup === 'asentamiento') setAsentamientoDecision(decision);
             if (popup === 'recursos') setRecursosDecision(decision);
             if (popup === 'relaciones') setRelacionesDecision(decision);
-            playSound(selectOptionSound); // Sonido al seleccionar opción
+            playSound(selectOptionSound);
             setPopup(null);
+            setOpcionesVisibles(null);
           }}
         />
       )}
 
-      {/* Botón para evaluar el futuro */}
+      {/* Botón para ver el futuro */}
       {todasTomadas && (
         <button onClick={() => {
           evaluarFuturo();
-          playSound(futureSound); // Sonido al ver el futuro
+          playSound(futureSound);
         }} style={boton}>
           Ver Futuro
         </button>
@@ -184,3 +186,4 @@ const boton: React.CSSProperties = {
 };
 
 export default MapaMarte;
+

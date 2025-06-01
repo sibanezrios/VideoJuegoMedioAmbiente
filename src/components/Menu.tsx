@@ -5,6 +5,7 @@ import fondoClaro from '../assets/fondoClaro.jpg';
 import './Inicio.css';
 import { Howl } from 'howler';
 import clickSound from '../assets/sounds/confirm_sound.mp3';
+import { useTTSContext } from '../assets/hooks/TTSContext';
 
 interface MenuProps {
   onStart: () => void;
@@ -13,6 +14,7 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const [mostrarControles, setMostrarControles] = useState(false);
   const [mostrarCreditos, setMostrarCreditos] = useState(false);
+  const { ttsEnabled, toggleTTS } = useTTSContext();
 
   // Función para reproducir el sonido de clic
   const playClickSound = () => {
@@ -23,6 +25,31 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
     sound.play();
   };
 
+  function reproducirLectura() {
+    function reproducirLectura() {
+      const synth = window.speechSynthesis;
+      synth.cancel();
+    
+      const lineas = [
+        'Bienvenido a EcoAventura',
+        'Elige sabiamente. Tu decisión impacta el planeta.'
+      ];
+    
+      let i = 0;
+      const leerLinea = () => {
+        if (i >= lineas.length) return;
+        const texto = new SpeechSynthesisUtterance(lineas[i]);
+        texto.lang = 'es-ES';
+        texto.onend = () => {
+          i++;
+          leerLinea(); // lee la siguiente
+        };
+        synth.speak(texto);
+      };
+    
+      leerLinea();
+    }
+  }
   return (
     <div className="inicio-dual-bg">
       {/* FONDOS */}
@@ -47,7 +74,11 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => { onStart(); playClickSound(); }}  // Agrega el sonido al hacer clic
+              onClick={() => {
+                reproducirLectura();
+                onStart();
+                
+              }}
             >
               🎮 Jugar
             </motion.button>
@@ -67,6 +98,14 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
             >
               📜 Créditos
             </motion.button>
+            <motion.button
+            className="start-button neon-button"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => { toggleTTS(); playClickSound(); }}
+          >
+            {ttsEnabled ? '🔇 Desactivar lector' : '🔊 Activar lector'}
+          </motion.button>
           </>
         )}
 
@@ -94,5 +133,6 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
     </div>
   );
 };
+
 
 export default Menu;
