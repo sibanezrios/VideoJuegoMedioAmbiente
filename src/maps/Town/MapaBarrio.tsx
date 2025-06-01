@@ -70,6 +70,11 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
   }
   useTTS(textoParaLeer);
 
+
+  const ICON_SIZE = 70; // Barrio
+  const ICON_OPACITY = 1;
+  
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
       <img src={mapa} alt="Mapa del barrio" style={mapaStyle} />
@@ -90,9 +95,11 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           position: 'absolute',
           top: '250px',
           left: '150px',
-          width: '100px',
+          width: `${ICON_SIZE}px`,
+          height: `${ICON_SIZE}px`,
           cursor: arbolDecision ? 'default' : 'pointer',
-          opacity: arbolDecision ? 0.4 : 1
+          display: arbolDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -112,9 +119,11 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           position: 'absolute',
           top: '200px',
           right: '150px',
-          width: '110px',
+          width: `${ICON_SIZE}px`,
+          height: `${ICON_SIZE}px`,
           cursor: fabricaDecision ? 'default' : 'pointer',
-          opacity: fabricaDecision ? 0.4 : 1
+          display: fabricaDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -134,9 +143,11 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           position: 'absolute',
           bottom: '100px',
           left: '400px',
-          width: '110px',
+          width: `${ICON_SIZE}px`,
+          height: `${ICON_SIZE}px`,
           cursor: loteDecision ? 'default' : 'pointer',
-          opacity: loteDecision ? 0.4 : 1
+          display: loteDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 

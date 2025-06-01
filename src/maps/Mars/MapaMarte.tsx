@@ -73,6 +73,9 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
   }
   useTTS(textoParaLeer);
 
+  const ICON_SIZE = 40;
+  const ICON_OPACITY = 0.25;
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
       <img src={mapaMarte} alt="Mapa de Marte" style={{
@@ -95,9 +98,11 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
           }
         }}
         style={{
-          position: 'absolute', top: '150px', left: '100px', width: '80px',
+          position: 'absolute', top: '150px', left: '100px',
+          width: `${ICON_SIZE}px`,
           cursor: asentamientoDecision ? 'default' : 'pointer',
-          opacity: asentamientoDecision ? 0.4 : 1
+          display: asentamientoDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -113,9 +118,11 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
           }
         }}
         style={{
-          position: 'absolute', top: '250px', right: '120px', width: '80px',
+          position: 'absolute', top: '250px', right: '120px',
+          width: `${ICON_SIZE}px`,
           cursor: recursosDecision ? 'default' : 'pointer',
-          opacity: recursosDecision ? 0.4 : 1
+          display: recursosDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -131,9 +138,11 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
           }
         }}
         style={{
-          position: 'absolute', bottom: '80px', left: '300px', width: '90px',
+          position: 'absolute', bottom: '80px', left: '300px',
+          width: `${ICON_SIZE}px`,
           cursor: relacionesDecision ? 'default' : 'pointer',
-          opacity: relacionesDecision ? 0.4 : 1
+          display: relacionesDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 

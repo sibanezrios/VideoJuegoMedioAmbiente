@@ -69,6 +69,9 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
   }
   useTTS(textoParaLeer);
 
+  const ICON_OPACITY= 0.8;
+  const ICON_SIZE =60;
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
       <img src={rio} alt="Mapa del río" style={mapaStyle} />
@@ -89,9 +92,10 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
           position: 'absolute',
           top: '150px',
           left: '120px',
-          width: '70px',
+          width: `${ICON_SIZE}px`,
           cursor: bosqueDecision ? 'default' : 'pointer',
-          opacity: bosqueDecision ? 0.4 : 1
+          display: bosqueDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -110,10 +114,11 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
         style={{
           position: 'absolute',
           top: '220px',
-          right: '180px',
-          width: '80px',
+          right: '200px',
+          width: `${ICON_SIZE}px`,
           cursor: plantaDecision ? 'default' : 'pointer',
-          opacity: plantaDecision ? 0.4 : 1
+          display: plantaDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -132,10 +137,12 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
         style={{
           position: 'absolute',
           bottom: '100px',
-          left: '350px',
-          width: '80px',
+          left: '170px',
+          width: `${ICON_SIZE}px`,
+          height: `${ICON_SIZE}px`,
           cursor: ríoDecision ? 'default' : 'pointer',
-          opacity: ríoDecision ? 0.4 : 1
+          display: ríoDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 

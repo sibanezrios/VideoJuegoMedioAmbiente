@@ -70,6 +70,9 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
     playSound(confirmSound);
   }
 
+  const ICON_OPACITY = 0.6;
+  const ICON_SIZE = 50;
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
       <img src={ciudadFondo} alt="Mapa de la ciudad" style={{
@@ -94,9 +97,10 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
           position: 'absolute',
           top: '200px',
           left: '100px',
-          width: '90px',
+          width: `${ICON_SIZE}px`,
           cursor: residencialDecision ? 'default' : 'pointer',
-          opacity: residencialDecision ? 0.4 : 1,
+          display: residencialDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -115,9 +119,10 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
           position: 'absolute',
           top: '150px',
           right: '120px',
-          width: '80px',
+          width: `${ICON_SIZE}px`,
           cursor: plantaNuclearDecision ? 'default' : 'pointer',
-          opacity: plantaNuclearDecision ? 0.4 : 1,
+          display: plantaNuclearDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -136,9 +141,10 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
           position: 'absolute',
           bottom: '80px',
           left: '300px',
-          width: '90px',
-          cursor: carreteraDecision ? 'default' : 'pointer',
-          opacity: carreteraDecision ? 0.4 : 1,
+          width: `${ICON_SIZE}px`,
+          cursor: plantaNuclearDecision ? 'default' : 'pointer',
+          display: plantaNuclearDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 

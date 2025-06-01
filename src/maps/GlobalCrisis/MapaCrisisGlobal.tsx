@@ -69,6 +69,9 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
     playSound(confirmSound);
   }
 
+  const ICON_OPACITY = 0.4;
+  const ICON_SIZE = 40;
+
   return (
     <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
       <img src={mundoFondo} alt="Mapa del mundo" style={{
@@ -93,9 +96,10 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
           position: 'absolute',
           top: '100px',
           left: '50px',
-          width: '90px',
+          width: `${ICON_SIZE}px`,
           cursor: cambioClimaticoDecision ? 'default' : 'pointer',
-          opacity: cambioClimaticoDecision ? 0.4 : 1,
+          display: cambioClimaticoDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -114,9 +118,10 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
           position: 'absolute',
           top: '150px',
           right: '120px',
-          width: '80px',
+          width: `${ICON_SIZE}px`,
           cursor: pandemiaDecision ? 'default' : 'pointer',
-          opacity: pandemiaDecision ? 0.4 : 1,
+          display: pandemiaDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
@@ -135,9 +140,10 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
           position: 'absolute',
           bottom: '80px',
           left: '300px',
-          width: '90px',
+          width: `${ICON_SIZE}px`,
           cursor: recursosDecision ? 'default' : 'pointer',
-          opacity: recursosDecision ? 0.4 : 1,
+          display: recursosDecision ? 'none' : 'block',
+          opacity: ICON_OPACITY,
         }}
       />
 
