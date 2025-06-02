@@ -18,7 +18,7 @@ import { useTTS } from '../../assets/hooks/useTTS';
 
 interface MapaMarteProps {
   currentScore: number;
-  setFutureResults: (results: FutureResults) => void;
+  setFutureResults: (results: FutureResults,extraScore: number) => void;
 }
 
 function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
@@ -60,7 +60,7 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
     setProgress(prev => Math.min(prev + 10, 100));
     const future = score >= 3 ? Future.VeryGood : score === 2 ? Future.Medium : Future.Bad;
     const results = buildResults(future, score);
-    setFutureResults(results);
+    setFutureResults(results,score);
     playSound(confirmSound);
   }
 
@@ -89,6 +89,7 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
       <img
         src={asentamientoIcono}
         alt="Asentamiento"
+        className='icono-popup'
         onClick={() => {
           if (!asentamientoDecision) {
             const tipo = 'asentamiento';
@@ -109,6 +110,7 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
       <img
         src={recursosIcono}
         alt="Recursos"
+        className='icono-popup'
         onClick={() => {
           if (!recursosDecision) {
             const tipo = 'recursos';
@@ -129,6 +131,7 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
       <img
         src={relacionesIcono}
         alt="Relaciones Internacionales"
+        className='icono-popup'
         onClick={() => {
           if (!relacionesDecision) {
             const tipo = 'relaciones';

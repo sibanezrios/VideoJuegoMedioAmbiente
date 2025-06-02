@@ -1,43 +1,36 @@
-import React, { useEffect } from "react";
-import { Howl } from "howler"; // Importar la librería Howler para reproducir sonidos
-import positvo from '../assets/sounds/path_to_positive_sound.mp3'
-import negativo from '../assets/sounds/path_to_negative_sound.mp3'
-import medio from '../assets/sounds/path_to_intermediate_sound.mp3'
+import React, { useEffect, useRef } from "react";
+import { Howl } from "howler";
+import positvo from '../assets/sounds/path_to_positive_sound.mp3';
+import negativo from '../assets/sounds/path_to_negative_sound.mp3';
+import medio from '../assets/sounds/path_to_intermediate_sound.mp3';
 
 interface FinalSceneProps {
-  progress: number; // Barra de progreso
+  progress: number; // Progreso final del jugador (0-100)
   onFinish: () => void; // Función para reiniciar el juego
 }
 
 const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
-  // Sonidos para cada resultado
-  const sonidoPositivo = new Howl({
-    src: [positvo], // Ruta del sonido positivo
-    volume: 0.5,
-  });
+  const roundedProgress = Number(progress.toFixed(2));
+  const hasPlayedSound = useRef(false);
 
-  const sonidoIntermedio = new Howl({
-    src: [medio], // Ruta del sonido intermedio
-    volume: 0.5,
-  });
+  const sonidoPositivo = new Howl({ src: [positvo], volume: 0.5 });
+  const sonidoIntermedio = new Howl({ src: [medio], volume: 0.5 });
+  const sonidoNegativo = new Howl({ src: [negativo], volume: 0.5 });
 
-  const sonidoNegativo = new Howl({
-    src: [negativo], // Ruta del sonido negativo
-    volume: 0.5,
-  });
-
-  // Función para reproducir el sonido basado en el progreso
   useEffect(() => {
-    if (progress === 100) {
+    if (hasPlayedSound.current) return;
+
+    if (roundedProgress === 100) {
       sonidoPositivo.play();
-    } else if (progress >= 50) {
+    } else if (roundedProgress >= 50) {
       sonidoIntermedio.play();
     } else {
       sonidoNegativo.play();
     }
-  }, [progress]); // Se ejecuta cada vez que el progreso cambia
 
-  // Mensaje final basado en el progreso
+    hasPlayedSound.current = true;
+  }, [roundedProgress]);
+
   const mensajeFinal = (porcentaje: number) => {
     if (porcentaje === 100) {
       return "¡Felicidades! Has alcanzado el máximo progreso. ¡Tu impacto ha sido positivo!";
@@ -52,7 +45,18 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
     <div style={finalContainer}>
       <div style={mensajeFinalStyle}>
         <h1 style={tituloEstilo}>¡Fin del Juego!</h1>
-        <p style={descripcionEstilo}>{mensajeFinal(progress)}</p>
+
+        <h2 style={porcentajeEstilo}>
+          Terminaste con {roundedProgress}% de Buenas Obras
+        </h2>
+
+        <div style={barraContenedor}>
+          <div style={{ ...barraEstilo, width: `${roundedProgress}%` }} />
+          <div style={porcentajeEstilo}>{roundedProgress}%</div>
+        </div>
+
+        <p style={descripcionEstilo}>{mensajeFinal(roundedProgress)}</p>
+
         <button style={botonEstilo} onClick={onFinish}>
           Volver a Jugar
         </button>
@@ -61,18 +65,18 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
   );
 };
 
-// Estilos para la escena final
+// Estilos
 const finalContainer: React.CSSProperties = {
   position: 'fixed',
   top: 0,
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.7)', // Fondo oscuro con transparencia
+  backgroundColor: 'rgba(0, 0, 0, 0.7)',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 1000, // Asegura que esté sobre todo el contenido
+  zIndex: 1000,
 };
 
 const mensajeFinalStyle: React.CSSProperties = {
@@ -91,14 +95,48 @@ const tituloEstilo: React.CSSProperties = {
   textShadow: '0 0 10px #00ffff',
 };
 
-const descripcionEstilo: React.CSSProperties = {
-  fontSize: '1.5rem',
+const porcentajeEstilo: React.CSSProperties = {
+  fontSize: '1.8rem',
+  color: '#00ffff',
+  margin: '20px 0',
+};
+
+const barraContenedor: React.CSSProperties = {
+  width: '300px',
+  height: '20px',
+  backgroundColor: '#e0e0e0',
+  borderRadius: '10px',
+  margin: '10px auto 20px',
+  position: 'relative',
+  overflow: 'hidden',
+};
+
+const barraEstilo: React.CSSProperties = {
+  height: '100%',
+  backgroundColor: '#4CAF50',
+  borderRadius: '10px',
+  transition: 'width 0.5s ease-in-out',
+};
+
+const etiquetaEstilo: React.CSSProperties = {
+  position: 'absolute',
+  top: '22px',
+  left: '50%',
+  transform: 'translateX(-50%)',
   color: '#fff',
-  marginBottom: '20px',
+  fontWeight: 'bold',
+  fontSize: '1rem',
+};
+
+const descripcionEstilo: React.CSSProperties = {
+  fontSize: '1.3rem',
+  color: '#fff',
+  marginTop: '20px',
   textShadow: '0 0 5px #00ffff',
 };
 
 const botonEstilo: React.CSSProperties = {
+  marginTop: '30px',
   padding: '10px 20px',
   backgroundColor: '#00b3b3',
   border: 'none',

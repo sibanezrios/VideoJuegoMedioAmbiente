@@ -83,6 +83,7 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
       <img
         src={arbolIcono}
         alt="Árbol"
+        className='icono-popup'
         onClick={() => {
           if (!arbolDecision) {
             const tipo = 'arbol';
@@ -96,10 +97,10 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           top: '250px',
           left: '150px',
           width: `${ICON_SIZE}px`,
-          height: `${ICON_SIZE}px`,
           cursor: arbolDecision ? 'default' : 'pointer',
           display: arbolDecision ? 'none' : 'block',
-          opacity: ICON_OPACITY,
+          opacity: ICON_OPACITY,         
+
         }}
       />
 
@@ -107,6 +108,7 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
       <img
         src={fabricaIcono}
         alt="Fábrica"
+        className='icono-popup'
         onClick={() => {
           if (!fabricaDecision) {
             const tipo = 'fabrica';
@@ -120,7 +122,6 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           top: '200px',
           right: '150px',
           width: `${ICON_SIZE}px`,
-          height: `${ICON_SIZE}px`,
           cursor: fabricaDecision ? 'default' : 'pointer',
           display: fabricaDecision ? 'none' : 'block',
           opacity: ICON_OPACITY,
@@ -131,6 +132,7 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
       <img
         src={loteIcono}
         alt="Lote Baldío"
+        className='icono-popup'
         onClick={() => {
           if (!loteDecision) {
             const tipo = 'lote';
@@ -144,7 +146,6 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
           bottom: '100px',
           left: '400px',
           width: `${ICON_SIZE}px`,
-          height: `${ICON_SIZE}px`,
           cursor: loteDecision ? 'default' : 'pointer',
           display: loteDecision ? 'none' : 'block',
           opacity: ICON_OPACITY,

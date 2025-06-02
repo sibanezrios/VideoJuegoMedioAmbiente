@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useTTSContext } from './TTSContext';
 
-export function useTTS(lines: string[], lang = 'es-Co') {
+export function useTTS(lines: string[], lang = 'es-Es') {
     const { ttsEnabled } = useTTSContext();
 
   useEffect(() => {

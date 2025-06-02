@@ -80,6 +80,7 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
       <img
         src={bosqueIcono}
         alt="Bosque"
+        className='icono-popup'
         onClick={() => {
           if (!bosqueDecision) {
             const tipo = 'bosque';
@@ -103,6 +104,7 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
       <img
         src={plantaIcono}
         alt="Planta industrial"
+        className='icono-popup'
         onClick={() => {
           if (!plantaDecision) {
             const tipo = 'planta';
@@ -126,6 +128,7 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
       <img
         src={muelleIcono}
         alt="Muelle"
+        className='icono-popup'
         onClick={() => {
           if (!ríoDecision) {
             const tipo = 'rio';
@@ -170,7 +173,8 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
       {/* Botón para evaluar futuro */}
       {todasTomadas && (
         <button
-          onClick={() => {
+        className='icono-popup'  
+        onClick={() => {
             evaluateFuture();
             playSound(futureSound);
           }}

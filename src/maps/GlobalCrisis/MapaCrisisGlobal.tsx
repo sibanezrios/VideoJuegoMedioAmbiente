@@ -84,6 +84,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={clima}
         alt="Cambio climático"
+        className='icono-popup'
         onClick={() => {
           if (!cambioClimaticoDecision) {
             const tipo = 'cambioClimatico';
@@ -106,6 +107,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={pandemia}
         alt="Pandemia"
+        className='icono-popup'
         onClick={() => {
           if (!pandemiaDecision) {
             const tipo = 'pandemia';
@@ -128,6 +130,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
       <img
         src={renovable}
         alt="Recursos naturales"
+        className='icono-popup'
         onClick={() => {
           if (!recursosDecision) {
             const tipo = 'recursos';

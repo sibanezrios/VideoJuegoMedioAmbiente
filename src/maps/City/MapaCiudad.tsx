@@ -85,6 +85,7 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
       <img
         src={zonaResidencialIcono}
         alt="Zona residencial"
+        className='icono-popup'
         onClick={() => {
           if (!residencialDecision) {
             const tipo = 'residencial';
@@ -107,6 +108,7 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
       <img
         src={plantaNuclearIcono}
         alt="Planta energética nuclear"
+        className='icono-popup'
         onClick={() => {
           if (!plantaNuclearDecision) {
             const tipo = 'plantaNuclear';
@@ -129,6 +131,7 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
       <img
         src={carreteraIcono}
         alt="Carretera"
+        className='icono-popup'
         onClick={() => {
           if (!carreteraDecision) {
             const tipo = 'carretera';

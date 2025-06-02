@@ -40,6 +40,12 @@ const DecisionPopup: React.FC<DecisionPopupProps> = ({
 
 export default DecisionPopup;
 
+export const popupTrigger: React.CSSProperties = {
+  position: 'absolute',
+  cursor: 'pointer',
+};
+
+
 // Estilos CSS en línea
 const popupContenedor: React.CSSProperties = {
   position: 'fixed',
