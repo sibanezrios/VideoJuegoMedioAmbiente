@@ -3,6 +3,7 @@ import { Howl } from "howler";
 import positvo from '../assets/sounds/path_to_positive_sound.mp3';
 import negativo from '../assets/sounds/path_to_negative_sound.mp3';
 import medio from '../assets/sounds/path_to_intermediate_sound.mp3';
+import { RegistroJugador } from "../utils/Register";
 
 interface FinalSceneProps {
   progress: number; // Progreso final del jugador (0-100)
@@ -18,17 +19,18 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
   const sonidoNegativo = new Howl({ src: [negativo], volume: 0.5 });
 
   useEffect(() => {
-    if (hasPlayedSound.current) return;
-
-    if (roundedProgress === 100) {
-      sonidoPositivo.play();
-    } else if (roundedProgress >= 50) {
-      sonidoIntermedio.play();
-    } else {
-      sonidoNegativo.play();
+    if (!hasPlayedSound.current) {
+      if (roundedProgress === 100) {
+        sonidoPositivo.play();
+      } else if (roundedProgress >= 50) {
+        sonidoIntermedio.play();
+      } else {
+        sonidoNegativo.play();
+      }
+      hasPlayedSound.current = true;
     }
 
-    hasPlayedSound.current = true;
+    
   }, [roundedProgress]);
 
   const mensajeFinal = (porcentaje: number) => {
@@ -45,18 +47,14 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
     <div style={finalContainer}>
       <div style={mensajeFinalStyle}>
         <h1 style={tituloEstilo}>¡Fin del Juego!</h1>
-
         <h2 style={porcentajeEstilo}>
           Terminaste con {roundedProgress}% de Buenas Obras
         </h2>
-
         <div style={barraContenedor}>
           <div style={{ ...barraEstilo, width: `${roundedProgress}%` }} />
           <div style={porcentajeEstilo}>{roundedProgress}%</div>
         </div>
-
         <p style={descripcionEstilo}>{mensajeFinal(roundedProgress)}</p>
-
         <button style={botonEstilo} onClick={onFinish}>
           Volver a Jugar
         </button>
@@ -64,7 +62,6 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
     </div>
   );
 };
-
 // Estilos
 const finalContainer: React.CSSProperties = {
   position: 'fixed',

@@ -1,30 +1,30 @@
 // Opciones para las decisiones del jugador
 export const preguntasYOpciones = {
   plantaNuclear: {
-    pregunta: "¿Cómo vas a manejar la planta energética nuclear?",
+    pregunta: "La ciudad depende de una planta nuclear para su energía. ¿Qué decisión tomarás respecto a su futuro?",
     opciones: [
-      { texto: "Invertir en energías renovables (solar y eólica) a largo plazo", valor: "invertir" },
-      { texto: "Cerrar la planta nuclear y apostar por energía 100% limpia, pero perder producción inmediata", valor: "cerrar" },
-      { texto: "Modernizar la planta nuclear con tecnologías más seguras, pero seguir dependiendo de energía nuclear", valor: "modernizar" },
-      { texto: "Expandir la planta nuclear para aumentar la producción, ignorando los efectos ambientales a largo plazo", valor: "expandir" }
+      { texto: "Invertir en energías renovables (solar y eólica) para una transición a largo plazo", valor: "invertir" },
+      { texto: "Cerrar la planta y apostar completamente por energía limpia, asumiendo una baja temporal en la producción", valor: "cerrar" },
+      { texto: "Modernizar la planta con tecnologías seguras, manteniendo la energía nuclear como fuente principal", valor: "modernizar" },
+      { texto: "Expandir la planta para aumentar la producción, ignorando los posibles riesgos ambientales", valor: "expandir" }
     ]
   },
   residencial: {
-    pregunta: "La ciudad necesita expandirse, pero las áreas verdes están en riesgo. ¿Cómo manejarás el crecimiento?",
+    pregunta: "La ciudad necesita crecer, pero las áreas verdes están amenazadas. ¿Cómo abordarás la expansión urbana?",
     opciones: [
-      { texto: "Expandir hacia zonas ya urbanizadas, conservando las áreas verdes", valor: "expandir" },
-      { texto: "Expandir hacia áreas verdes, pero asegurando que la mitad del espacio se destine a parques y jardines", valor: "expandir-verde" },
-      { texto: "Conservar las áreas verdes y aumentar la densidad de edificios en las zonas urbanizadas", valor: "conservar" },
-      { texto: "Expandir sin restricciones, priorizando el crecimiento económico rápido", valor: "expandir-liberado" }
+      { texto: "Expandir solo en zonas ya urbanizadas, protegiendo las áreas verdes existentes", valor: "expandir" },
+      { texto: "Expandirse en zonas verdes, pero reservar la mitad del espacio para parques y jardines", valor: "expandir-verde" },
+      { texto: "Proteger completamente las zonas verdes y aumentar la densidad en las áreas urbanas actuales", valor: "conservar" },
+      { texto: "Permitir una expansión sin restricciones, priorizando el crecimiento económico inmediato", valor: "expandir-liberado" }
     ]
   },
   carretera: {
-    pregunta: "El tráfico es un problema creciente, pero las soluciones implican compromisos. ¿Qué harás con el transporte urbano?",
+    pregunta: "El tráfico urbano se ha vuelto un gran desafío. ¿Cuál será tu estrategia de movilidad?",
     opciones: [
-      { texto: "Invertir en un sistema de transporte público ecológico, eléctrico y eficiente", valor: "invertir" },
-      { texto: "Expandir las carreteras y promover el uso de vehículos eléctricos para reducir la contaminación", valor: "expandir-sostenible" },
-      { texto: "Ampliar las carreteras para facilitar el tránsito de vehículos privados, pero sin tener en cuenta la sostenibilidad a largo plazo", valor: "expandir-privado" },
-      { texto: "Desarrollar un sistema mixto: mejorar el transporte público y las infraestructuras para bicicletas y peatones", valor: "mixto" }
+      { texto: "Invertir en un sistema de transporte público eléctrico, ecológico y eficiente", valor: "invertir" },
+      { texto: "Expandir las carreteras e incentivar el uso de vehículos eléctricos", valor: "expandir-sostenible" },
+      { texto: "Ampliar vías para vehículos privados, sin considerar sostenibilidad ambiental", valor: "expandir-privado" },
+      { texto: "Diseñar un sistema mixto: transporte público, ciclovías y espacios peatonales", valor: "mixto" }
     ]
   }
 };

@@ -1,24 +1,23 @@
-// Opciones para las decisiones del jugador
 export const preguntasYOpciones = {
   arbol: {
-    pregunta: '¿Quieres conservar los árboles?',
+    pregunta: "Hay varios árboles antiguos en la zona que podrían talarse para construir más viviendas. ¿Qué decides?",
     opciones: [
-      { texto: 'Conservar los árboles', valor: 'conservar' },
-      { texto: 'Solo si generan ganancias', valor: 'eliminar' }
+      { texto: "Conservar los árboles para mantener la biodiversidad y sombra natural", valor: "conservar" },
+      { texto: "Talar los árboles solo si se demuestra que generarán ganancias económicas", valor: "eliminar" }
     ]
   },
   fabrica: {
-    pregunta: '¿Quieres modernizar esta fábrica contaminante?',
+    pregunta: "Una fábrica contaminante opera cerca del barrio. ¿Qué harás con ella?",
     opciones: [
-      { texto: 'Si, con tecnologia limpia que respete el ambiente', valor: 'modernizar' },
-      { texto: 'Modernizar la fábrica, pero afectar 200 empleos', valor: 'mantener' }
+      { texto: "Modernizarla con tecnologías limpias para reducir su impacto ambiental", valor: "modernizar" },
+      { texto: "Mantenerla como está para evitar el cierre y la pérdida de 200 empleos", valor: "mantener" }
     ]
   },
   lote: {
-    pregunta: '¿Quieres convertir este espacio en un parque, a petición de 10 niños de la comunidad?',
+    pregunta: "Un terreno baldío podría ser transformado según las sugerencias de la comunidad. ¿Qué opción eliges?",
     opciones: [
-      { texto: 'Convertir el lote en parque, cumpliendo la petición de unicamente el 10% de las personas en el pueblo', valor: 'parque' },
-      { texto: 'Convertir el lote en zona comercial(los gastos serán donados por una empresa extranjera que quiere expandir su territorio)', valor: 'comercial' }
+      { texto: "Crear un parque para responder a la solicitud de niños y fomentar espacios verdes", valor: "parque" },
+      { texto: "Convertirlo en una zona comercial con fondos donados por una empresa extranjera", valor: "comercial" }
     ]
   }
 };

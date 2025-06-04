@@ -1,27 +1,27 @@
-// Opciones para las decisiones del jugador
+// Opciones para las decisiones del jugador en Marte
 export const preguntasYOpciones = {
   asentamiento: {
-    pregunta: "¿Cómo construirás los primeros asentamientos en Marte?",
+    pregunta: "¿Qué tipo de asentamientos establecerás para los primeros colonos en Marte?",
     opciones: [
-      { texto: "Construir grandes asentamientos autosuficientes con alta comodidad", valor: "autosuficiente" },
-      { texto: "Construir asentamientos modulares, eficientes pero menos cómodos", valor: "modular" },
-      { texto: "Construir asentamientos básicos pero con gran expansión futura", valor: "básico" }
+      { texto: "Asentamientos autosuficientes y cómodos, pero costosos y difíciles de expandir", valor: "autosuficiente" },
+      { texto: "Asentamientos modulares, eficientes y fáciles de ampliar, aunque menos cómodos", valor: "modular" },
+      { texto: "Asentamientos básicos de rápida implementación, pensando en una expansión futura", valor: "básico" }
     ]
   },
   recursos: {
-    pregunta: "¿Cómo gestionarás los recursos limitados de Marte?",
+    pregunta: "Los recursos en Marte son escasos. ¿Cómo planeas gestionarlos?",
     opciones: [
-      { texto: "Extraer recursos de manera intensiva para asegurar el abastecimiento inmediato", valor: "intensiva" },
-      { texto: "Implementar tecnologías de reciclaje y sostenibilidad para gestionar los recursos", valor: "sostenibilidad" },
-      { texto: "Establecer comercio con la Tierra para obtener recursos externos", valor: "comercio" }
+      { texto: "Extraer de forma intensiva para asegurar el suministro inmediato, asumiendo riesgos ambientales", valor: "intensiva" },
+      { texto: "Usar tecnologías sostenibles de reciclaje y eficiencia para preservar los recursos", valor: "sostenibilidad" },
+      { texto: "Establecer comercio regular con la Tierra para importar los recursos necesarios", valor: "comercio" }
     ]
   },
   relaciones: {
-    pregunta: "¿Cómo manejarás las relaciones con la Tierra?",
+    pregunta: "¿Cuál será tu estrategia para mantener relaciones con la Tierra?",
     opciones: [
-      { texto: "Dependencia total de la Tierra para recursos y apoyo logístico", valor: "dependencia" },
-      { texto: "Establecer una autonomía total para Marte", valor: "independencia" },
-      { texto: "Mantener una cooperación equilibrada con la Tierra", valor: "cooperacion" }
+      { texto: "Depender completamente de la Tierra para apoyo logístico y recursos", valor: "dependencia" },
+      { texto: "Buscar independencia total, desarrollando una colonia autosuficiente", valor: "independencia" },
+      { texto: "Establecer una relación de cooperación mutua, con autonomía parcial", valor: "cooperacion" }
     ]
   }
 };

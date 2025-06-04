@@ -187,4 +187,16 @@
   filter: drop-shadow(0 0 6px #00ffcc);
 }
 
+.nombre-input {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+  text-align: center;
+  box-shadow: 0 0 10px #00ffff88;
+  background-color: #111;
+  color: white;
+}
 

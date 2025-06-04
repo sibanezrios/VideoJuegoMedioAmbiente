@@ -1,27 +1,26 @@
-// Opciones para las decisiones del jugador
-export   const preguntasYOpciones = {
+export const preguntasYOpciones = {
   cambioClimatico: {
-    pregunta: "¿Cómo abordas el cambio climático global?",
+    pregunta: "El cambio climático afecta a todo el planeta. ¿Qué política internacional aplicarás?",
     opciones: [
-      { texto: "Imponer sanciones a los países más contaminantes", valor: "sanciones" },
-      { texto: "Promover un acuerdo global de reducción de emisiones", valor: "acuerdo" },
-      { texto: "Dejar que cada país gestione sus políticas de forma independiente", valor: "independiente" }
+      { texto: "Aplicar sanciones económicas a los países con mayores emisiones contaminantes", valor: "sanciones" },
+      { texto: "Promover un acuerdo global obligatorio para reducir emisiones y financiar energías limpias", valor: "acuerdo" },
+      { texto: "Permitir que cada país decida sus propias medidas climáticas según su contexto", valor: "independiente" }
     ]
   },
   pandemia: {
-    pregunta: "¿Cómo coordinarás la respuesta internacional a la pandemia?",
+    pregunta: "Una nueva pandemia amenaza la salud global. ¿Cuál será tu enfoque de coordinación internacional?",
     opciones: [
-      { texto: "Cerrar fronteras y aislar países ricos", valor: "restricciones" },
-      { texto: "Distribuir vacunas globalmente", valor: "cooperacion" },
-      { texto: "Dejar que cada nación gestione de forma independiente", valor: "independiente" }
+      { texto: "Cerrar fronteras y priorizar la seguridad de países con más recursos", valor: "restricciones" },
+      { texto: "Fomentar la cooperación internacional y distribuir vacunas de forma equitativa", valor: "cooperacion" },
+      { texto: "Dejar que cada nación gestione su estrategia sanitaria por separado", valor: "independiente" }
     ]
   },
   recursos: {
-    pregunta: "¿Cómo gestionarás la escasez de recursos naturales?",
+    pregunta: "La escasez de recursos naturales genera conflictos entre países. ¿Qué estrategia propones?",
     opciones: [
-      { texto: "Nacionalizar recursos y priorizar intereses nacionales", valor: "nacionalizar" },
-      { texto: "Crear un sistema de distribución global justa", valor: "distribucion" },
-      { texto: "Dejar que el mercado regule los recursos", valor: "mercado" }
+      { texto: "Nacionalizar recursos y priorizar las necesidades del país", valor: "nacionalizar" },
+      { texto: "Crear un sistema global de distribución justa y sostenible", valor: "distribucion" },
+      { texto: "Permitir que el libre mercado regule el acceso y precio de los recursos", valor: "mercado" }
     ]
   }
 };

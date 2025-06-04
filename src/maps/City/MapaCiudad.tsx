@@ -145,8 +145,8 @@ const MapaCiudad: React.FC<MapaCiudadProps> = ({ currentScore, setFutureResults 
           bottom: '80px',
           left: '300px',
           width: `${ICON_SIZE}px`,
-          cursor: plantaNuclearDecision ? 'default' : 'pointer',
-          display: plantaNuclearDecision ? 'none' : 'block',
+          cursor: carreteraDecision ? 'default' : 'pointer',
+          display: carreteraDecision ? 'none' : 'block',
           opacity: ICON_OPACITY,
         }}
       />

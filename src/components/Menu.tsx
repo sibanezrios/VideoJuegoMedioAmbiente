@@ -6,6 +6,7 @@ import './Inicio.css';
 import { Howl } from 'howler';
 import clickSound from '../assets/sounds/confirm_sound.mp3';
 import { useTTSContext } from '../assets/hooks/TTSContext';
+import HistorialPartidas from './Historial';
 
 interface MenuProps {
   onStart: () => void;
@@ -14,62 +15,58 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const [mostrarControles, setMostrarControles] = useState(false);
   const [mostrarCreditos, setMostrarCreditos] = useState(false);
+  const [mostrarHistorial, setMostrarHistorial] = useState(false);
   const { ttsEnabled, toggleTTS } = useTTSContext();
 
-  // Función para reproducir el sonido de clic
   const playClickSound = () => {
     const sound = new Howl({
       src: [clickSound],
-      volume: 0.5,  // Ajusta el volumen según lo necesites
+      volume: 0.5,
     });
     sound.play();
   };
 
-  function reproducirLectura() {
-    function reproducirLectura() {
-      const synth = window.speechSynthesis;
-      synth.cancel();
-    
-      const lineas = [
-        'Bienvenido a EcoAventura',
-        'Elige sabiamente. Tu decisión impacta el planeta.'
-      ];
-    
-      let i = 0;
-      const leerLinea = () => {
-        if (i >= lineas.length) return;
-        const texto = new SpeechSynthesisUtterance(lineas[i]);
-        texto.lang = 'es-ES';
-        texto.onend = () => {
-          i++;
-          leerLinea(); // lee la siguiente
-        };
-        synth.speak(texto);
+  const reproducirLectura = () => {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const lineas = [
+      'Bienvenido a EcoAventura',
+      'Elige sabiamente. Tu decisión impacta el planeta.'
+    ];
+
+    let i = 0;
+    const leerLinea = () => {
+      if (i >= lineas.length) return;
+      const texto = new SpeechSynthesisUtterance(lineas[i]);
+      texto.lang = 'es-ES';
+      texto.onend = () => {
+        i++;
+        leerLinea();
       };
-    
-      leerLinea();
-    }
-  }
+      synth.speak(texto);
+    };
+
+    leerLinea();
+  };
+
   return (
     <div className="inicio-dual-bg">
-      {/* FONDOS */}
       <img src={fondoOscuro} className="imagen-incendio" alt="Futuro oscuro" />
       <img src={fondoClaro} className="imagen-bosque" alt="Futuro brillante" />
-
-      {/* DIVISOR */}
       <div className="divisor-animado"></div>
 
-      {/* CUADRO CENTRAL */}
       <motion.div
         className="contenedor-central"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}
       >
-        {!mostrarControles && !mostrarCreditos && (
+        {!mostrarControles && !mostrarCreditos && !mostrarHistorial && (
           <>
             <h1 className="central-texto">🌿 EcoAventura</h1>
             <p className="central-texto">Elige sabiamente. Tu decisión impacta el planeta.</p>
+
             <motion.button
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
@@ -77,35 +74,46 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
               onClick={() => {
                 reproducirLectura();
                 onStart();
-                
               }}
             >
               🎮 Jugar
             </motion.button>
+
             <motion.button
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => { setMostrarControles(true); playClickSound(); }}  // Agrega el sonido al hacer clic
+              onClick={() => { setMostrarControles(true); playClickSound(); }}
             >
               📘 Controles
             </motion.button>
+
             <motion.button
               className="start-button neon-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => { setMostrarCreditos(true); playClickSound(); }}  // Agrega el sonido al hacer clic
+              onClick={() => { setMostrarCreditos(true); playClickSound(); }}
             >
               📜 Créditos
             </motion.button>
+
             <motion.button
-            className="start-button neon-button"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => { toggleTTS(); playClickSound(); }}
-          >
-            {ttsEnabled ? '🔇 Desactivar lector' : '🔊 Activar lector'}
-          </motion.button>
+              className="start-button neon-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { setMostrarHistorial(true); playClickSound(); }}
+            >
+              📊 Historial
+            </motion.button>
+
+            <motion.button
+              className="start-button neon-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { toggleTTS(); playClickSound(); }}
+            >
+              {ttsEnabled ? '🔇 Desactivar lector' : '🔊 Activar lector'}
+            </motion.button>
           </>
         )}
 
@@ -129,10 +137,21 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
             <button className="start-button neon-button" onClick={() => { setMostrarCreditos(false); playClickSound(); }}>🔙 Volver</button>
           </>
         )}
+
+        {mostrarHistorial && (
+          <>
+            <HistorialPartidas />
+            <button
+              className="start-button neon-button"
+              onClick={() => { setMostrarHistorial(false); playClickSound(); }}
+            >
+              🔙 Volver
+            </button>
+          </>
+        )}
       </motion.div>
     </div>
   );
 };
-
 
 export default Menu;
