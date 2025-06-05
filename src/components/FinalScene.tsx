@@ -5,6 +5,8 @@ import negativo from '../assets/sounds/path_to_negative_sound.mp3';
 import medio from '../assets/sounds/path_to_intermediate_sound.mp3';
 import { RegistroJugador } from "../utils/Register";
 
+import { BufferWriterNavegador } from "./BufferWriterNavegador";
+
 interface FinalSceneProps {
   progress: number; // Progreso final del jugador (0-100)
   onFinish: () => void; // Función para reiniciar el juego
@@ -58,6 +60,26 @@ const FinalScene: React.FC<FinalSceneProps> = ({ progress, onFinish }) => {
         <button style={botonEstilo} onClick={onFinish}>
           Volver a Jugar
         </button>
+              <button
+        onClick={() =>
+          BufferWriterNavegador.descargarComoTxt(RegistroJugador.obtenerTodos())
+        }
+        style={{
+          marginTop: '16px',
+          padding: '10px 20px',
+          backgroundColor: '#10B981',
+          color: 'white',
+          fontWeight: 'bold',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          boxShadow: '0 0 10px rgba(16, 185, 129, 0.6)',
+          transition: 'all 0.3s ease'
+        }}
+      >
+        📄 Descargar Historial de Partidas
+      </button>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { BufferWriter } from "./BufferWritter";
 import { NodoRegistro } from "./NodoRegister";
 import { Registro } from "./Register";
 
@@ -41,4 +42,9 @@ export class ListaEnlazadaRegistro {
     }
     return lista;
   }
+    guardarEnArchivo(): void {
+    const registros = this.obtenerTodos();
+    BufferWriter.escribir(registros);
+  }
+
 }
