@@ -6,6 +6,8 @@ import { Fase } from './constants';
 import Game from './components/Game';
 import FinalScene from './components/FinalScene';
 import { TTSProvider } from './assets/hooks/TTSContext'; 
+import { RegistroJugador } from './utils/Register';
+
 
 function App() {
   const [fase, setFase] = useState<Fase>(Fase.Start);
@@ -19,7 +21,23 @@ function App() {
       setFase(Fase.Menu);
       }} />}
       {fase === Fase.Menu && <Menu onStart={() => setFase(Fase.Game)} />}
-      {fase === Fase.Game && <Game onFinish={(p) => {setFase(Fase.End);setProgress(p)}} />}
+      {fase === Fase.Game && (
+  <Game
+    onFinish={(p) => {
+      setFase(Fase.End);
+      setProgress(p);
+
+      const partida = {
+        nombre: jugador || 'Jugador1',
+        puntaje: p,
+        fecha: new Date().toISOString(),
+      };
+
+      RegistroJugador.guardar(partida); // ✅ guarda partida en localStorage
+    }}
+  />
+)}
+
       {fase === Fase.End && (<FinalScene progress={progress} onFinish={() => setFase(Fase.Start)} />
       )}
     </TTSProvider>
