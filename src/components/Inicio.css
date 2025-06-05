@@ -200,3 +200,28 @@
   color: white;
 }
 
+@media screen and (max-width: 768px) {
+  .contexto-box {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .contexto-titulo {
+    font-size: 1.5rem;
+  }
+
+  .contexto-descripcion,
+  .contexto-objetivo-descripcion {
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .contexto-objetivo {
+    font-size: 1rem;
+  }
+
+  .start-button.neon-button {
+    width: 100%;
+    font-size: 1rem;
+  }
+}

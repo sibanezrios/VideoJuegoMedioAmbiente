@@ -73,7 +73,7 @@ const MapaCrisisGlobal: React.FC<MapaCrisisGlobalProps> = ({ currentScore, setFu
   const ICON_SIZE = 40;
 
   return (
-    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto'  }}>
       <img src={mundoFondo} alt="Mapa del mundo" style={{
         width: '100%',
         border: '2px solid transparent',

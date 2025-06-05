@@ -76,7 +76,7 @@ function MapaBarrio({ currentScore, setFutureResults }: MapaBarrioProps) {
   
 
   return (
-    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto' ,}}>
       <img src={mapa} alt="Mapa del barrio" style={mapaStyle} />
 
       {/* Icono árbol */}

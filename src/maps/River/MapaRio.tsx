@@ -73,7 +73,7 @@ function MapaRio({ currentScore, setFutureResults }: MapaRioProps) {
   const ICON_SIZE =60;
 
   return (
-    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto'  }}>
       <img src={rio} alt="Mapa del río" style={mapaStyle} />
 
       {/* Icono bosque */}

@@ -14,6 +14,7 @@ import futureSound from './assets/sounds/future_sound.mp3';
 import { Howl } from 'howler';
 import { useTTSContext } from '../../assets/hooks/TTSContext';
 import { useTTS } from '../../assets/hooks/useTTS';
+import { color } from 'framer-motion';
 
 
 interface MapaMarteProps {
@@ -77,7 +78,7 @@ function MapaMarte({ currentScore, setFutureResults }: MapaMarteProps){
   const ICON_OPACITY = 0.25;
 
   return (
-    <div style={{ position: 'relative', width: '1024px', margin: 'auto' }}>
+    <div style={{ position: 'relative', width: '1024px', margin: 'auto'  }}>
       <img src={mapaMarte} alt="Mapa de Marte" style={{
         width: '100%',
         border: '2px solid transparent',
