@@ -126,13 +126,9 @@ const Game: React.FC<GameProps> = ({ onFinish }) => {
                 {futureResults ? (
                   <FutureScene results={futureResults!} onContinue={levelUp} />
                 ) : (
-                  <MapaMarte
-                    currentScore={score}
-                    setFutureResults={(results, marsScore) => {
-                      setFutureResults(results);
-                      setScore(prev => prev + marsScore); 
-                    }}
-                  />
+                  <MapaMarte currentScore={score} setFutureResults={(results) => {setFutureResults(results); }}
+/>
+
                 )}
               </>
             )}

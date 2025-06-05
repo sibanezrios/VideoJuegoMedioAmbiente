@@ -31,7 +31,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
     synth.cancel();
 
     const lineas = [
-      'Bienvenido a EcoAventura',
+      'Bienvenido a Eco_Heroes',
       'Elige sabiamente. Tu decisión impacta el planeta.'
     ];
 
@@ -64,7 +64,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
       >
         {!mostrarControles && !mostrarCreditos && !mostrarHistorial && (
           <>
-            <h1 className="central-texto">🌿 EcoAventura</h1>
+            <h1 className="central-texto">🌿 Eco_Heroes</h1>
             <p className="central-texto">Elige sabiamente. Tu decisión impacta el planeta.</p>
 
             <motion.button
@@ -117,26 +117,53 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
           </>
         )}
 
-        {mostrarControles && (
-          <>
-            <h2 className="central-texto">🕹️ Controles</h2>
-            <ul style={{ color: 'white', listStyle: 'none', padding: 0 }}>
-              <li>✔️ Buena acción = suma puntos</li>
-              <li>❌ Mala acción = resta puntos</li>
-              <li>🚀 Ver el futuro = muestra el resultado</li>
-            </ul>
-            <button className="start-button neon-button" onClick={() => { setMostrarControles(false); playClickSound(); }}>🔙 Volver</button>
-          </>
-        )}
+   {mostrarControles && (
+  <>
+    <h2 className="central-texto">🕹️ ¿Cómo se juega?</h2>
+    <ul style={{ color: 'white', listStyle: 'none', padding: 0 }}>
+      <li>🔍 Debes buscar los elementos clickeables dentro de cada mapa (fábricas, árboles, asentamientos, etc).</li>
+      <li>🧠 Al hacer clic, deberás tomar decisiones que afectan el futuro del planeta.</li>
+      <li>✔️ Si tomas buenas decisiones, se suman puntos y mejoras el futuro.</li>
+      <li>❌ Si tomas malas decisiones, perderás puntos y el planeta empeorará.</li>
+      <li>🚀 Usa el botón "Ver Futuro" para ver el impacto de tus elecciones.</li>
+    </ul>
+    <button
+      className="start-button neon-button"
+      onClick={() => {
+        setMostrarControles(false);
+        playClickSound();
+      }}
+    >
+      🔙 Volver
+    </button>
+  </>
+)}
 
-        {mostrarCreditos && (
-          <>
-            <h2 className="central-texto">📜 Créditos</h2>
-            <p style={{ color: 'white' }}>Juego desarrollado por tu equipo ambiental 💚</p>
-            <p style={{ color: 'white' }}>Ilustraciones creadas con IA</p>
-            <button className="start-button neon-button" onClick={() => { setMostrarCreditos(false); playClickSound(); }}>🔙 Volver</button>
-          </>
-        )}
+{mostrarCreditos && (
+  <>
+    <h2 className="central-texto">📜 Créditos</h2>
+    <p style={{ color: 'white' }}>🎮 <strong>EcoSpark Studios</strong></p>
+    <ul style={{ color: 'white', listStyle: 'none', padding: 0 }}>
+      <li>👨‍💼 Miguel Cortes — Gerente de proyectos</li>
+      <li>🧪 Juan D. Durán — Director de pruebas</li>
+      <li>🎨 Sara Ibañez — Directora de UI/UX y de diseño</li>
+      <li>📄 Juan M. Marín — Director de documentación</li>
+    </ul>
+    <p style={{ color: 'white', marginTop: '10px' }}>
+      💡 Con el apoyo técnico de <strong>ChatGPT (OpenAI)</strong> para lógica, diseño narrativo y asistencia en programación.
+    </p>
+    <p style={{ color: 'white' }}>🖼️ Ilustraciones creadas con IA</p>
+    <button
+      className="start-button neon-button"
+      onClick={() => {
+        setMostrarCreditos(false);
+        playClickSound();
+      }}
+    >
+      🔙 Volver
+    </button>
+  </>
+)}
 
         {mostrarHistorial && (
           <>

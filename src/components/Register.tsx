@@ -1,24 +1,27 @@
+import { ListaEnlazadaRegistro } from "./ListaEnlazadaRegistro";
+
 export interface Registro {
   nombre: string;
   puntaje: number;
   fecha: string;
 }
-
 export class RegistroJugador {
   static clave = "historial_partidas";
 
-  static guardar(nuevo: Registro) {
-    const datos = this.obtenerTodos();
-    datos.push(nuevo);
-    localStorage.setItem(this.clave, JSON.stringify(datos));
+  static guardar(nuevo: Registro): void {
+    const json = localStorage.getItem(this.clave);
+    const lista = ListaEnlazadaRegistro.desdeJSON(json);
+    lista.agregar(nuevo);
+    localStorage.setItem(this.clave, JSON.stringify(lista.obtenerTodos()));
   }
 
   static obtenerTodos(): Registro[] {
-    const datos = localStorage.getItem(this.clave);
-    return datos ? JSON.parse(datos) : [];
+    const json = localStorage.getItem(this.clave);
+    const lista = ListaEnlazadaRegistro.desdeJSON(json);
+    return lista.obtenerTodos();
   }
 
-  static limpiar() {
+  static limpiar(): void {
     localStorage.removeItem(this.clave);
   }
 }
